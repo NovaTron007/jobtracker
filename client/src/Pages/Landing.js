@@ -1,12 +1,13 @@
-import logo from '../assets/images/logo.svg'
-import main from '../assets/images/main.svg'
-import Wrapper from '../assets/Wrappers/Testing' // use styled component func name, then file name
+import { Link } from "react-router-dom"
+import main from "../assets/images/main.svg"
+import Wrapper from "../assets/Wrappers/Testing" // import styled component (name how we like)
+import Logo from "../Components/Logo"
 
 const Landing = () => {
   return (
     <Wrapper>
         <nav>
-            <img src={logo} className="logo" alt="" />
+            <Logo />
         </nav>
         <div className="container page">
             <div className="info">
@@ -16,7 +17,7 @@ const Landing = () => {
                     Quae, amet recusandae itaque quidem tempore atque ex rem quasi, aliquam, 
                     consectetur sit quia error expedita nobis ducimus earum placeat natus voluptatum!
                 </p>
-                <button className="btn btn-hero">Login/Register</button>
+                <Link to="/register" className="btn btn-hero">Login/Register</Link>
             </div>
             <img src={main} alt="jobtracker" className="img main-img" />
         </div>

@@ -1,10 +1,17 @@
-import Landing from './Pages/Landing'
+import {BrowserRouter, Routes, Route } from "react-router-dom"
+import { Landing, Dashboard, Register, Error } from "./Pages" // refer index file to get components
 
 function App() {
   return (
-    <div>
-      <Landing />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/landing" element={<Landing />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="*" element={<Error />} />
+      </Routes>
+    </BrowserRouter>
+    
   );
 }
 
