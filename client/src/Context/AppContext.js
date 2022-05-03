@@ -26,6 +26,7 @@ const AppProvider = ({children}) => {
     // actions to control state
     const displayAlert = () => {
         dispatch({type: DISPLAY_ALERT})
+        // clear alert
         clearAlert()
     }
     const clearAlert = () => {
