@@ -17,7 +17,7 @@ const Register = () => {
     const [values, setValues] = useState(initialState)
 
 	// get global state, dispatch actions from context
-	const { showAlert, displayAlert, clearAlert } = useAppContext()
+	const { showAlert, displayAlert } = useAppContext()
 	
 	// get onChange value in form row
     const handleChange = (e) => {
@@ -37,6 +37,7 @@ const Register = () => {
 		const { name, email, password, isMember } = values
 		// check fields
 		if(!email || !password || (!isMember && !name)) {
+			// 
 			displayAlert()
 		}
 		return

@@ -18,7 +18,7 @@ const useAppContext = () => {
     return useContext(AppContext) // react hook must use term "use"
 }
 
-// provider (provide data to child components)
+// provider (provide data to child components in index.js)
 const AppProvider = ({children}) => {
     // set state: use dispatch for useReducer (accepts the reducer, initialState)
     const [state, dispatch] = useReducer(reducer, initialState)
