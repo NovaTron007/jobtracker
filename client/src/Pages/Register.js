@@ -37,7 +37,7 @@ const Register = () => {
 		const { name, email, password, isMember } = values
 		// check fields
 		if(!email || !password || (!isMember && !name)) {
-			// 
+			// action
 			displayAlert()
 		}
 		return

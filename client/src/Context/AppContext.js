@@ -23,7 +23,7 @@ const AppProvider = ({children}) => {
     // set state: use dispatch for useReducer (accepts the reducer, initialState)
     const [state, dispatch] = useReducer(reducer, initialState)
     
-    // actions
+    // actions to control state
     const displayAlert = () => {
         dispatch({type: DISPLAY_ALERT})
         clearAlert()
