@@ -1,8 +1,12 @@
 import React from 'react'
+import { useAppContext } from "../Context/AppContext" // get global state from context
 
-function Alert({message}) {
+function Alert() {
+  // get state from context
+  const {alertType, alertText} = useAppContext()
+
   return (
-    <div className="alert alert-danger">{message}</div>
+    <div className={`alert alert-${alertType}`}>{alertText}</div>
   )
 }
 

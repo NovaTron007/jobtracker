@@ -1,6 +1,7 @@
-import {useState, useEffect } from 'react'
+import { useState } from 'react'
 import Wrapper from "../assets/Wrappers/RegisterPage"
 import { Alert, FormRow, Logo } from '../Components' // loaded in index.js
+import { useAppContext } from '../Context/AppContext'
 
 // initial state object
 const initialState = {
@@ -14,20 +15,35 @@ const initialState = {
 const Register = () => {
 	// initial state object set state
     const [values, setValues] = useState(initialState)
+
+	// get global state, dispatch actions from context
+	const { showAlert, displayAlert, clearAlert } = useAppContext()
+	
 	// get onChange value in form row
     const handleChange = (e) => {
-        console.log(e.target)
+		// spread original values and add new values
+        setValues({...values, [e.target.name]: e.target.value}) // [dynamic key]
     }
-	// submit form
-    const onSubmit = (e) => {
-        e.preventDefault()
-    }
-	// is member
+
+	// set member
 	const toggleMember = () => {
 		setValues({...values, isMember: !values.isMember})
 	}
 
-    
+	// submit form
+	const onSubmit = (e) => {
+		e.preventDefault()
+		// get local state values
+		const { name, email, password, isMember } = values
+		// check fields
+		if(!email || !password || (!isMember && !name)) {
+			displayAlert()
+		}
+		return
+	}
+	
+	
+
     return (
       <Wrapper className="full-page">
 		<form className="form" onSubmit={onSubmit}>
@@ -37,30 +53,30 @@ const Register = () => {
 			<h2>{ values.isMember ? "Login" : "Register" }</h2>
 			
 			{/* alert message */}
-			{ values.showAlert && <Alert message="Error submitting" /> }
+			{ showAlert && <Alert /> }
 			
-			{/* name */}
+			{/* name: pass name and value to input */}
 			{ !values.isMember &&
 				<FormRow 
 					type="text" 
-					labelName="name" 
+					name="name" 
 					labelText="Name" 
 					value={values.name} 
 					handleChange={handleChange} 
 				/>
 			}
-			{/* email */}
+			{/* email: pass name and value to input */}
 			<FormRow 
 				type="email" 
-				labelName="email" 
+				name="email" 
 				labelText="Email" 
 				value={values.email}  
 				handleChange={handleChange} 
 			/>
-			{/*password*/}
+			{/*password: pass name and value to input*/}
 			<FormRow 
 				type="password" 
-				labelName="password" 
+				name="password" 
 				labelText="Password" 
 				value={values.password}  
 				handleChange={handleChange} 
