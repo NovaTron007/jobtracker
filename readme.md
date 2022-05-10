@@ -4,6 +4,7 @@
 - npm install express
 - npm install dotenv
 - npm install mongoose
+- npm install validator
 
 # create .gitignore
 - /node_modules
