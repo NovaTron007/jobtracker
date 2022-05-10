@@ -1,19 +1,19 @@
-exports.createJob = (req, res) => {
+export const createJob = (req, res) => {
     res.send("create job")
 }
 
-exports.getAllJobs = (req, res) => {
+export const getAllJobs = (req, res) => {
     res.send("get all jobs")
 }
 
-exports.updateJob = (req, res) => {
+export const updateJob = (req, res) => {
     res.send("update user")
 }
 
-exports.deleteJob = (req, res) => {
+export const deleteJob = (req, res) => {
     res.send("delete job")
 }
 
-exports.showStats = (req, res) => {
+export const showStats = (req, res) => {
     res.send("show stats")
 }

@@ -1,8 +1,17 @@
+import { StatusCodes } from "http-status-codes"
+
 const errorHandlerMiddleware = (err, req, res, next) => {
     console.log(err)
-    res.status(500).json({
-        message: "There as an error"
+    // use status code in object
+    const defaultError = {
+        statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
+        message: "Server error"
+    }
+    // response
+    res.status(defaultError.statusCode).json({
+        message: "There as an error", 
+        err: err
     })
 }
 
-module.exports = errorHandlerMiddleware
+export default errorHandlerMiddleware

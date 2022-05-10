@@ -1,6 +1,6 @@
-const express = require("express")
+import express from "express"
 const router = express.Router()
-const { register, login, updateUser } = require("../controllers/authController") // load controllers for routes to call
+import { register, login, updateUser } from "../controllers/authController.js" // load controllers for routes to call
 
 // prepended: /api/v1/auth
 router.route("/register").post(register)
@@ -9,4 +9,4 @@ router.route("/updateUser").patch(updateUser)
 
 
 //export the router
-module.exports = router
+export default router

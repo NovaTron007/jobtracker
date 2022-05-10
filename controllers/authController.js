@@ -1,25 +1,21 @@
-const User = require("../models/User")
+import User from "../models/User.js"
+import { StatusCodes } from "http-status-codes"
 
 
-exports.register = async (req, res, next) => {
-    try {
+export const register = async (req, res, next) => {
         // create user
         const user = await User.create(req.body)
         // response
-        res.status(200).json({
+        res.status(StatusCodes.CREATED).json({
             success: true,
             data: user
         })
-    } catch (err) {
-        // pass to error middleware
-        next(err)
-    }
 }
 
-exports.login = (req, res) => {
+export const login = (req, res) => {
     res.send("login user")
 }
 
-exports.updateUser = (req, res) => {
+export const updateUser = (req, res) => {
     res.send("update user")
 }

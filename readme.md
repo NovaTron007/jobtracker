@@ -5,6 +5,8 @@
 - npm install dotenv
 - npm install mongoose
 - npm install validator
+- npm install express-async-errors
+- npm install http-status-codes
 
 # create .gitignore
 - /node_modules

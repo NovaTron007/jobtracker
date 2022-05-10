@@ -1,6 +1,6 @@
-const express = require("express")
+import express from "express"
 const router = express.Router()
-const { createJob, getAllJobs, updateJob, deleteJob, showStats } = require("../controllers/jobController") // load controllers for routes to call
+import { createJob, getAllJobs, updateJob, deleteJob, showStats } from "../controllers/jobController.js" // load controllers for routes to call
 
 // create & get jobs
 router.route("/")
@@ -17,4 +17,4 @@ router.route("/stats").get(showStats)
 
 
 //export the router
-module.exports = router
+export default router

@@ -1,8 +1,9 @@
-const express = require("express") // import express
-const dotenv =require("dotenv") // read env vars
-const notFoundMiddleware = require("./middleware/notFoundMiddleware")
-const errorHandlerMiddleware = require("./middleware/errorHandlerMiddleware")
-const connectDB = require("./config/dbConnect") // connect to mongodb
+import express from "express" // import express
+import dotenv from "dotenv" // read env vars
+import "express-async-errors" // try/catch removed
+import notFoundMiddleware from "./middleware/notFoundMiddleware.js"
+import errorHandlerMiddleware from "./middleware/errorHandlerMiddleware.js"
+import connectDB from "./config/dbConnect.js" // connect to mongodb
 
 // use express
 const app = express()
@@ -10,8 +11,8 @@ const app = express()
 dotenv.config({path: "./config/.env"}) // load .env before other files that use them
 
 // import route files (calls controller)
-const authRouter = require("./routes/authRoutes")
-const jobsRouter = require("./routes/jobRoutes")
+import authRouter from "./routes/authRoutes.js"
+import jobsRouter from "./routes/jobRoutes.js"
 
 // Parse json data sent from body
 app.use(express.json())

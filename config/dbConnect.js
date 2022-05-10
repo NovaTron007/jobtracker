@@ -1,4 +1,4 @@
-const mongoose = require("mongoose")
+import mongoose from "mongoose"
 
 
 // connect to db using mongo atlas creds: async as mongoose connect returns a promise
@@ -13,4 +13,4 @@ const connectDB = async () => {
 
 }
 
-module.exports = connectDB
+export default connectDB
