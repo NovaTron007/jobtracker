@@ -21,10 +21,14 @@ export const register = async (req, res, next) => {
         // create user
         const user = await User.create({ name, email, password })
 
+        // create jwt
+        const token = user.createJWT()
+
         // response
         res.status(StatusCodes.CREATED).json({
             success: true,
-            data: user
+            user: {email: user.email, name: user.name, lastName: user.lastName, location: user.location},
+            token
         })
 }
 

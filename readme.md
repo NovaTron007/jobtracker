@@ -7,6 +7,8 @@
 - npm install validator
 - npm install express-async-errors
 - npm install http-status-codes
+- npm install bcryptjs
+- npm install jsonwebtoken
 
 # create .gitignore
 - /node_modules
