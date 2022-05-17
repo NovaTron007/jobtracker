@@ -1,6 +1,7 @@
 import express from "express" // import express
 import dotenv from "dotenv" // read env vars
 import "express-async-errors" // try/catch removed
+import cors from "cors"
 import notFoundMiddleware from "./middleware/notFoundMiddleware.js"
 import errorHandlerMiddleware from "./middleware/errorHandlerMiddleware.js"
 import connectDB from "./config/dbConnect.js" // connect to mongodb
@@ -16,6 +17,9 @@ import jobsRouter from "./routes/jobRoutes.js"
 
 // Parse json data sent from body
 app.use(express.json())
+
+// allow cross origin requests
+app.use(cors())
 
 // Routes: prefix then use route file for endpoint
 app.use("/api/v1/auth", authRouter)

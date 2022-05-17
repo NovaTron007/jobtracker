@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useNavigate } from "react-router-dom"
 import Wrapper from "../assets/Wrappers/RegisterPage"
 import { Alert, FormRow, Logo } from '../Components' // loaded in index.js
 import { useAppContext } from '../Context/AppContext'
@@ -17,7 +18,10 @@ const Register = () => {
     const [values, setValues] = useState(initialState)
 
 	// get global state, dispatch actions from context
-	const { showAlert, displayAlert } = useAppContext()
+	const { showAlert, displayAlert, registerUser, user } = useAppContext()
+
+	// useNavigate
+	const navigate = useNavigate()
 	
 	// get onChange value in form row
     const handleChange = (e) => {
@@ -35,15 +39,34 @@ const Register = () => {
 		e.preventDefault()
 		// get local state values
 		const { name, email, password, isMember } = values
+		// user object
+		const newUser = { name, email, password}
 		// check fields
 		if(!email || !password || (!isMember && !name)) {
 			// action
 			displayAlert()
+			return
 		}
-		return
+		// submit 
+		if(!isMember)  {
+			registerUser(newUser)
+		} else {
+			console.log("already a user")
+		}
 	}
 	
-	
+	// onmount: listen for user changes set in global state
+	useEffect(() => {
+		// if user retrieved from context
+		if(user) {
+			setTimeout(() => {
+				navigate("/")
+			}, 2000);
+		}
+	}, [user, navigate])
+
+
+
 
     return (
       <Wrapper className="full-page">
