@@ -1,4 +1,4 @@
-import { DISPLAY_ALERT, CLEAR_ALERT, REGISTER_USER, REGISTER_USER_SUCCESS, REGISTER_USER_ERROR } from "./actions"
+import { DISPLAY_ALERT, CLEAR_ALERT, AUTH_USER, AUTH_USER_SUCCESS, AUTH_USER_ERROR } from "./actions"
 
 // create reducer
 const reducer = (state, action) => {
@@ -7,7 +7,7 @@ const reducer = (state, action) => {
             ...state, 
             showAlert: true,
             alertType: "danger",
-            alertText: "Please provide all values"
+            alertMessage: "Please provide all values"
         }
     }
     if(action.type === CLEAR_ALERT) {
@@ -15,16 +15,16 @@ const reducer = (state, action) => {
             ...state,
             showAlert: false,
             alertType: "",
-            alertText: ""
+            alertMessage: ""
         }
     }
-    if(action.type === REGISTER_USER) {
+    if(action.type === AUTH_USER) {
         return {
             ...state, 
             isLoading: false
         }
     }
-    if(action.type === REGISTER_USER_SUCCESS) {
+    if(action.type === AUTH_USER_SUCCESS) {
         return {
             ...state,
             user: action.payload.user,
@@ -33,17 +33,17 @@ const reducer = (state, action) => {
             jobLocation: action.payload.location,
             showAlert: true,
             alertType: "success",
-            alertText: "User created! Redirecting..."
+            alertMessage: action.payload.alertMessage
         }
     }
-    if(action.type === REGISTER_USER_ERROR) {
+    if(action.type === AUTH_USER_ERROR) {
         console.log("reducer state: ", state)
         return {
             ...state,
             isLoading: false,
             showAlert: true, 
             alertType: "danger",
-            alertText: action.payload.message
+            alertMessage: action.payload.alertMessage
         }
     }
     throw new Error(`No such action ${action.type}.`)

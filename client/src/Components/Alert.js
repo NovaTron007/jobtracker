@@ -3,10 +3,10 @@ import { useAppContext } from "../Context/AppContext" // get global state from c
 
 function Alert() {
   // get state from context
-  const {alertType, alertText} = useAppContext()
+  const {alertType, alertMessage} = useAppContext()
 
   return (
-    <div className={`alert alert-${alertType}`}>{alertText}</div>
+    <div className={`alert alert-${alertType}`}>{alertMessage}</div>
   )
 }
 

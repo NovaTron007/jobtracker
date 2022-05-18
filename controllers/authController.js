@@ -4,42 +4,43 @@ import { CustomErrorMessage } from "../errors/index.js"
 
 
 export const register = async (req, res, next) => {
-        // get req.body
-        const { name, email, password } = req.body
-        // use custom errors: add message to js Error object before errorHandlerMiddleware response
-        if(!name || !email || !password) {
-            throw new CustomErrorMessage("Please provide all values", StatusCodes.BAD_REQUEST)
-        }
+    // get req.body
+    const { name, email, password } = req.body
+    // use custom errors: add message to js Error object before errorHandlerMiddleware response
+    if(!name || !email || !password) {
+        throw new CustomErrorMessage("Please provide all values", StatusCodes.BAD_REQUEST)
+    }
 
-        // check user exists
-        const userAlreadyExists = await User.findOne({ email })
-        // use custom errors: add message to js Error object before errorHandlerMiddleware response
-        if(userAlreadyExists) {
-            throw new CustomErrorMessage(`Email already exists`, StatusCodes.BAD_REQUEST)
-        }
-        
-        // create user
-        const user = await User.create({ name, email, password })
+    // check user exists
+    const userAlreadyExists = await User.findOne({ email })
+    // use custom errors: add message to js Error object before errorHandlerMiddleware response
+    if(userAlreadyExists) {
+        throw new CustomErrorMessage(`Email already exists`, StatusCodes.BAD_REQUEST)
+    }
+    
+    // create user
+    const user = await User.create({ name, email, password })
 
-        // create jwt
-        const token = user.createJWT()
+    // create jwt
+    const token = user.createJWT()
 
-        // response
-        res.status(StatusCodes.CREATED).json({
-            success: true,
-            user: {email: user.email, name: user.name, lastName: user.lastName, location: user.location}, // send specific fields
-            location: user.location,
-            token
-        })
+    // response object
+    res.status(StatusCodes.CREATED).json({
+        success: true,
+        user: {email: user.email, name: user.name, lastName: user.lastName, location: user.location}, // send specific fields
+        location: user.location,
+        token
+    })
 }
 
 export const login = async (req, res) => {
-   const { email, password } = req.body
-   
-   // check fields
-   if(!email || !password) {
+    // get req.body
+    const { email, password } = req.body
+
+    // check fields
+    if(!email || !password) {
         throw new CustomErrorMessage(`Please complete all fields!`, StatusCodes.BAD_REQUEST)
-   }
+    }
 
    // get user from db
    const user = await User.findOne({email}).select("+password") // access password field: select is false in model

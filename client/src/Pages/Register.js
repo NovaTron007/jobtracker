@@ -18,7 +18,7 @@ const Register = () => {
     const [values, setValues] = useState(initialState)
 
 	// get global state, dispatch actions from context
-	const { showAlert, displayAlert, registerUser, user } = useAppContext()
+	const { user, showAlert, displayAlert, authUser } = useAppContext()
 
 	// useNavigate
 	const navigate = useNavigate()
@@ -39,8 +39,8 @@ const Register = () => {
 		e.preventDefault()
 		// get local state values
 		const { name, email, password, isMember } = values
-		// user object
-		const newUser = { name, email, password}
+		// create user object from fields
+		const currentUser = { name, email, password}
 		// check fields
 		if(!email || !password || (!isMember && !name)) {
 			// action
@@ -48,10 +48,12 @@ const Register = () => {
 			return
 		}
 		// submit 
-		if(!isMember)  {
-			registerUser(newUser)
+		if(isMember)  {
+			// login pass object with details
+			authUser({currentUser, endpoint: "login", alertMessage: "Login successful!"})
 		} else {
-			console.log("already a user")
+			// register pass object with details
+			authUser({currentUser, endpoint: "register", alertMessage: "Register successful!"})
 		}
 	}
 	

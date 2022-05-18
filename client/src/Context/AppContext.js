@@ -1,7 +1,7 @@
 import React, { useContext, useReducer } from "react" // use hooks
 import axios from "axios" // axios (allow XMLHttpRequests)
 import reducer from "./reducer" // import our reducer
-import { CLEAR_ALERT, DISPLAY_ALERT, REGISTER_USER, REGISTER_USER_SUCCESS, REGISTER_USER_ERROR } from "./actions"
+import { CLEAR_ALERT, DISPLAY_ALERT, AUTH_USER, AUTH_USER_SUCCESS, AUTH_USER_ERROR } from "./actions"
 
 
 
@@ -10,7 +10,7 @@ const user = localStorage.getItem("user")
 const token = localStorage.getItem("token")
 const userLocation = localStorage.getItem("location")
 
-// localStorage: add user by passing object, initialise global state       mcccccccccccccccccccvvvvvvvvvv                                           
+// localStorage: add user by passing object, initialise global state                                         
 const addUserToLocalStorage = ({user, token, location}) => {
     localStorage.setItem("user", JSON.stringify(user))
     localStorage.setItem("token", token)
@@ -26,7 +26,7 @@ const removeUserFromLocalStorage = () => {
 const initialState = {
     isLoading: false, 
     showAlert: false, 
-    alertText: "",
+    alertMessage: "",
     alertType: "",
     user: user ? JSON.parse(user) : null, // parse object from storage
     token: token ? token : null,
@@ -64,20 +64,21 @@ const AppProvider = ({children}) => {
         }, 2000);
     }
 
-    // register user: submit data to api
-    const registerUser = async (newUser) => {
+    // register user: submit data to api, destructure object
+    const authUser = async ({currentUser, endpoint, alertMessage}) => {
         // dispatch action w/payload and set global state
-        dispatch({type: REGISTER_USER})
-
+        dispatch({type: AUTH_USER})
+        console.log("authUser: ", currentUser)
+        // call api and pass user object
         try {
-            const response = await axios.post("/api/v1/auth/register", newUser)
+            const response = await axios.post(`/api/v1/auth/${endpoint}`, currentUser)
             console.log("response from api: ", response)
             // response: destructure response from api
             const { user, token, location } = response.data
             // dispatch action: w/payload and set global state
             dispatch({
-                    type: REGISTER_USER_SUCCESS, 
-                    payload: {user, token, location} // payload object
+                    type: AUTH_USER_SUCCESS, 
+                    payload: {user, token, location, alertMessage} // payload object
             })
             // set localStorage: add object
             addUserToLocalStorage({user, token, location})
@@ -88,8 +89,8 @@ const AppProvider = ({children}) => {
             const { message } = err.response.data
             // dispatch action: w/payload and set global state
             dispatch({ 
-                type: REGISTER_USER_ERROR, 
-                payload: { message } // payload object
+                type: AUTH_USER_ERROR, 
+                payload: {alertMessage: message} // payload object
             })
         }
 
@@ -97,9 +98,10 @@ const AppProvider = ({children}) => {
         clearAlert()
     }
 
+
     return (
         // provide state, actions to child components
-        <AppContext.Provider value={{...state, displayAlert, clearAlert, registerUser }}>{children}</AppContext.Provider>
+        <AppContext.Provider value={{...state, displayAlert, clearAlert, authUser }}>{children}</AppContext.Provider>
     )
 }
 
