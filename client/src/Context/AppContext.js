@@ -3,17 +3,35 @@ import axios from "axios" // axios (allow XMLHttpRequests)
 import reducer from "./reducer" // import our reducer
 import { CLEAR_ALERT, DISPLAY_ALERT, REGISTER_USER, REGISTER_USER_SUCCESS, REGISTER_USER_ERROR } from "./actions"
 
+
+
+// localStorage: check any storage before init
+const user = localStorage.getItem("user")
+const token = localStorage.getItem("token")
+const userLocation = localStorage.getItem("location")
+
+// localStorage: add user by passing object, initialise global state       mcccccccccccccccccccvvvvvvvvvv                                           
+const addUserToLocalStorage = ({user, token, location}) => {
+    localStorage.setItem("user", JSON.stringify(user))
+    localStorage.setItem("token", token)
+    localStorage.setItem("location", location)
+}
+const removeUserFromLocalStorage = () => {
+    localStorage.removeItem("user")
+    localStorage.removeItem("token")
+    localStorage.removeItem("location")
+}
+
 // global state
 const initialState = {
     isLoading: false, 
     showAlert: false, 
     alertText: "",
     alertType: "",
-    user: null, 
-    token: null,
-    userLocation: "",
-    jobLocation: "",
-
+    user: user ? JSON.parse(user) : null, // parse object from storage
+    token: token ? token : null,
+    userLocation: userLocation || null,
+    jobLocation: userLocation || null,
 }
 
 // create context
@@ -61,11 +79,12 @@ const AppProvider = ({children}) => {
                     type: REGISTER_USER_SUCCESS, 
                     payload: {user, token, location} // payload object
             })
-            // set localStorage
+            // set localStorage: add object
+            addUserToLocalStorage({user, token, location})
         } 
         // get err response object returned from browser
         catch(err) {
-            console.log("error registering: ", err.response.data)
+            err && console.log("error registering: ", err.response.data)
             const { message } = err.response.data
             // dispatch action: w/payload and set global state
             dispatch({ 

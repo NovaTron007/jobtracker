@@ -37,6 +37,7 @@ const reducer = (state, action) => {
         }
     }
     if(action.type === REGISTER_USER_ERROR) {
+        console.log("reducer state: ", state)
         return {
             ...state,
             isLoading: false,

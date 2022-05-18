@@ -1,7 +1,8 @@
 import express from "express" // import express
 import dotenv from "dotenv" // read env vars
 import "express-async-errors" // try/catch removed
-import cors from "cors"
+import cors from "cors" // enable req to to other servers
+import morgan from "morgan" // log HTTP requests and errors, and simplifies the process. 
 import notFoundMiddleware from "./middleware/notFoundMiddleware.js"
 import errorHandlerMiddleware from "./middleware/errorHandlerMiddleware.js"
 import connectDB from "./config/dbConnect.js" // connect to mongodb
@@ -28,6 +29,11 @@ app.use("/api/v1/jobs", jobsRouter)
 // Middleware
 app.use(notFoundMiddleware) // run if no route exists
 app.use(errorHandlerMiddleware) // show error messages
+
+// http logger middleware: check environment to log errors in development mode 
+if(process.env.NODE_ENV !== "production") {
+    app.use(morgan("dev")) // dev colours
+}
 
 // PORT constant in env
 const PORT = process.env.PORT || 5000

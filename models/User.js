@@ -48,6 +48,12 @@ UserSchema.pre("save", async function(){
     this.password = await bcrypt.hash(this.password, salt)
 })
 
+// check password using bcrypt
+UserSchema.methods.comparePassword = async function(password) {
+    const isMatch = await bcrypt.compare(password, this.password) // bcrypt compare method
+    return isMatch
+}
+
 // instance method: create jwt instance method
 UserSchema.methods.createJWT = function() {
     console.log(this) // log user

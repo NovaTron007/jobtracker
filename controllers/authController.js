@@ -27,13 +27,46 @@ export const register = async (req, res, next) => {
         // response
         res.status(StatusCodes.CREATED).json({
             success: true,
-            user: {email: user.email, name: user.name, lastName: user.lastName, location: user.location},
+            user: {email: user.email, name: user.name, lastName: user.lastName, location: user.location}, // send specific fields
+            location: user.location,
             token
         })
 }
 
-export const login = (req, res) => {
-    res.send("login user")
+export const login = async (req, res) => {
+   const { email, password } = req.body
+   
+   // check fields
+   if(!email || !password) {
+        throw new CustomErrorMessage(`Please complete all fields!`, StatusCodes.BAD_REQUEST)
+   }
+
+   // get user from db
+   const user = await User.findOne({email}).select("+password") // access password field: select is false in model
+   console.log("login (user): ", user)
+   
+   // check user
+   if(!user) {
+       throw new CustomErrorMessage("Invalid credentials", StatusCodes.UNAUTHORIZED)
+   }
+   
+   // check passwords to db: use bcrypt to compare passwords (returns boolean)
+   const passwordMatch = await user.comparePassword(password)
+   console.log("passwordMatch: ", passwordMatch)
+   if(!passwordMatch) {
+       throw new CustomErrorMessage("Invalid credentials", StatusCodes.UNAUTHORIZED)
+   }
+
+   // create jwt
+   const token = await user.createJWT()
+   user.password = undefined // don't show password in response
+   
+   // response
+   res.status(StatusCodes.OK).json({
+       user,
+       token,
+       location: user.location
+   })
 }
 
 export const updateUser = (req, res) => {
