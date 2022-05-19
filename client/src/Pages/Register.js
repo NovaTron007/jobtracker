@@ -15,7 +15,7 @@ const initialState = {
 
 const Register = () => {
 	// initial state object set state
-    const [values, setValues] = useState(initialState)
+    const [formValues, setFormValues] = useState(initialState)
 
 	// get global state, dispatch actions from context
 	const { user, showAlert, displayAlert, authUser } = useAppContext()
@@ -26,19 +26,19 @@ const Register = () => {
 	// get onChange value in form row
     const handleChange = (e) => {
 		// spread original values and add new values
-        setValues({...values, [e.target.name]: e.target.value}) // [dynamic key]
+        setFormValues({...formValues, [e.target.name]: e.target.value}) // [dynamic key]
     }
 
 	// set member
 	const toggleMember = () => {
-		setValues({...values, isMember: !values.isMember})
+		setFormValues({...formValues, isMember: !formValues.isMember})
 	}
 
 	// submit form
 	const onSubmit = (e) => {
 		e.preventDefault()
 		// get local state values
-		const { name, email, password, isMember } = values
+		const { name, email, password, isMember } = formValues
 		// create user object from fields
 		const currentUser = { name, email, password}
 		// check fields
@@ -76,18 +76,18 @@ const Register = () => {
 			<Logo />
 			
 			{/* title */}
-			<h2>{ values.isMember ? "Login" : "Register" }</h2>
+			<h2>{ formValues.isMember ? "Login" : "Register" }</h2>
 			
 			{/* alert message */}
 			{ showAlert && <Alert /> }
 			
 			{/* name: pass name and value to input */}
-			{ !values.isMember &&
+			{ !formValues.isMember &&
 				<FormRow 
 					type="text" 
 					name="name" 
 					labelText="Name" 
-					value={values.name} 
+					value={formValues.name} 
 					handleChange={handleChange} 
 				/>
 			}
@@ -96,7 +96,7 @@ const Register = () => {
 				type="email" 
 				name="email" 
 				labelText="Email" 
-				value={values.email}  
+				value={formValues.email}  
 				handleChange={handleChange} 
 			/>
 			{/*password: pass name and value to input*/}
@@ -104,16 +104,16 @@ const Register = () => {
 				type="password" 
 				name="password" 
 				labelText="Password" 
-				value={values.password}  
+				value={formValues.password}  
 				handleChange={handleChange} 
 			/>
 			<button type="submit" className="btn btn-block">Submit</button>
 			<p>
-				{values.isMember ? "Not yet a member?" : "Already a member?"}
+				{formValues.isMember ? "Not yet a member?" : "Already a member?"}
 				<button 
 					type="button" 
 					className="member-btn" 
-					onClick={toggleMember}>{values.isMember ? "Register" : "Login"}
+					onClick={toggleMember}>{formValues.isMember ? "Register" : "Login"}
 				</button>
 			</p>
 		</form>
