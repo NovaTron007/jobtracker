@@ -8,7 +8,7 @@ function App() {
       <Routes>
         {/* nested routes */}
         <Route path="/" element={<SharedLayout />}>
-          <Route index element={<Stats />} /> {/* index uses path="/" */}
+          <Route index element={<Stats />} /> {/* index uses path="/" and <Stats/> as home */}
           <Route path="stats" element={<Stats />} /> {/* falls under path "/" */}
           <Route path="all-jobs" element={<AllJobs />}/>
           <Route path="add-job" element={<AddJob/> }/>

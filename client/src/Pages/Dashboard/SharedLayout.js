@@ -10,7 +10,7 @@ const SharedLayout = () => {
               <Link to="/all-jobs">All Jobs</Link>
               <Link to="/stats">Stats</Link>
               <Link to="/profile">Profile</Link>
-              {/* <Outlet /> */}
+              <Outlet />{/* show routes nested inside SharedLayout's Route path */}
           </nav>
       </Wrapper>
   )
