@@ -1,17 +1,21 @@
 import React from 'react'
 import { Outlet, Link } from 'react-router-dom'
 import Wrapper from "../../assets/Wrappers/SharedLayout"
+import { Navbar, SmallSidebar, BigSidebar } from "../../Components/"
 
 const SharedLayout = () => {
   return (
       <Wrapper>
-          <nav>
-              <Link to="/add-job">Add Job</Link>
-              <Link to="/all-jobs">All Jobs</Link>
-              <Link to="/stats">Stats</Link>
-              <Link to="/profile">Profile</Link>
-              <Outlet />{/* show routes nested inside SharedLayout's Route path */}
-          </nav>
+          <main className="dashboard">
+              <SmallSidebar />
+              <BigSidebar />
+              <div>
+                <Navbar />
+                <div className="dashboard-page">
+                    <Outlet />{/* show routes nested inside SharedLayout's Route path */}
+                </div>
+              </div>
+          </main>
       </Wrapper>
   )
 }

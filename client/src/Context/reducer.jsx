@@ -1,6 +1,6 @@
-import { DISPLAY_ALERT, CLEAR_ALERT, AUTH_USER, AUTH_USER_SUCCESS, AUTH_USER_ERROR } from "./actions"
+import { DISPLAY_ALERT, CLEAR_ALERT, AUTH_USER, AUTH_USER_SUCCESS, AUTH_USER_ERROR, TOGGLE_SIDEBAR } from "./actions"
 
-// create reducer
+// create reducer: initialState passed from AppContext ie: const [state, dispatch] = useReducer(reducer, initialState)
 const reducer = (state, action) => {
     if(action.type === DISPLAY_ALERT) {
         return {
@@ -44,6 +44,12 @@ const reducer = (state, action) => {
             showAlert: true, 
             alertType: "danger",
             alertMessage: action.payload.alertMessage
+        }
+    }
+    if(action.type === TOGGLE_SIDEBAR) {
+        return {
+            ...state,
+            showSidebar: !state.showSidebar // access initialState object
         }
     }
     throw new Error(`No such action ${action.type}.`)
