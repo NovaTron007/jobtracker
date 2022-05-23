@@ -8,6 +8,7 @@ function App() {
       <Routes>
         {/* nested routes */}
         <Route path="/" element={
+          // wrap with protected route
           <ProtectedRoute>
             <SharedLayout />
           </ProtectedRoute>

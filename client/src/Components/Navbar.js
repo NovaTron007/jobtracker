@@ -7,14 +7,15 @@ import Logo from "./Logo.js"
 const Navbar = () => {
 
   // get global state from context 
-  const { toggleSidebar, showSidebar } = useAppContext()
+  const { toggleSidebar } = useAppContext()
   // local state: show logout button
   const [showLogoutBtn, setShowLogoutBtn] = useState(false)
 
   return (
     <Wrapper>
       <div className="nav-center">
-        <button className="toggle-btn" onClick={() => console.log("toggle sidebar")}>
+        {/* toggleSidebar context function */}
+        <button className="toggle-btn" onClick={toggleSidebar}>
         <FaAlignLeft />
         </button>
         <div>
