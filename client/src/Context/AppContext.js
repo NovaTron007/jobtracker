@@ -1,7 +1,7 @@
 import React, { useContext, useReducer } from "react" // use hooks
 import axios from "axios" // axios (allow XMLHttpRequests)
 import reducer from "./reducer" // import our reducer
-import { CLEAR_ALERT, DISPLAY_ALERT, AUTH_USER, AUTH_USER_SUCCESS, AUTH_USER_ERROR, SHOW_SIDEBAR, TOGGLE_SIDEBAR } from "./actions"
+import { CLEAR_ALERT, DISPLAY_ALERT, AUTH_USER, AUTH_USER_SUCCESS, AUTH_USER_ERROR, TOGGLE_SIDEBAR, LOGOUT_USER } from "./actions"
 
 
 
@@ -101,15 +101,24 @@ const AppProvider = ({children}) => {
 
     // toggle sidebar
     const toggleSidebar = () => {
-        dispatch( {
+        dispatch({
             type: TOGGLE_SIDEBAR
         })
+    }
+
+    // logout
+    const logoutUser = () => {
+        dispatch({
+            type: LOGOUT_USER 
+        })
+        // clear storage
+        removeUserFromLocalStorage()
     }
 
 
     return (
         // provide state, actions to child components
-        <AppContext.Provider value={{...state, displayAlert, clearAlert, authUser, toggleSidebar }}>{children}</AppContext.Provider>
+        <AppContext.Provider value={{...state, displayAlert, clearAlert, authUser, toggleSidebar, logoutUser }}>{children}</AppContext.Provider>
     )
 }
 

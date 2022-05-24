@@ -1,4 +1,4 @@
-import { DISPLAY_ALERT, CLEAR_ALERT, AUTH_USER, AUTH_USER_SUCCESS, AUTH_USER_ERROR, TOGGLE_SIDEBAR } from "./actions"
+import { DISPLAY_ALERT, CLEAR_ALERT, AUTH_USER, AUTH_USER_SUCCESS, AUTH_USER_ERROR, TOGGLE_SIDEBAR, LOGOUT_USER } from "./actions"
 
 // create reducer: initialState passed from AppContext ie: const [state, dispatch] = useReducer(reducer, initialState)
 const reducer = (state, action) => {
@@ -50,6 +50,16 @@ const reducer = (state, action) => {
         return {
             ...state,
             showSidebar: !state.showSidebar // access initialState object
+        }
+    }
+    if(action.type === LOGOUT_USER) {
+        return {
+            ...state,
+            user: null,
+            token: null,
+            userLocation: null,
+            jobLocation: null 
+            
         }
     }
     throw new Error(`No such action ${action.type}.`)

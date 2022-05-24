@@ -7,3 +7,5 @@ export const AUTH_USER_SUCCESS = "AUTH_USER_SUCCESS"
 export const AUTH_USER_ERROR = "AUTH_USER_ERROR"
 // navbar
 export const TOGGLE_SIDEBAR = "TOGGLE_SIDEBAR"
+// logout
+export const LOGOUT_USER = "LOGOUT_USER"

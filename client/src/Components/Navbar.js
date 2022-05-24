@@ -7,7 +7,7 @@ import Logo from "./Logo.js"
 const Navbar = () => {
 
   // get global state from context 
-  const { toggleSidebar } = useAppContext()
+  const { toggleSidebar, logoutUser, user } = useAppContext()
   // local state: show logout button
   const [showLogoutBtn, setShowLogoutBtn] = useState(false)
 
@@ -26,7 +26,7 @@ const Navbar = () => {
           {/* profile button: toggle logout button */}
           <button type="button" className="btn" onClick={() => setShowLogoutBtn(!showLogoutBtn)}>
             <FaUserCircle/>
-              Dwayne
+              {user?.name} {/* optional chaining */}
             <FaCaretDown />
           </button>
           {/* logout button */}
@@ -34,7 +34,7 @@ const Navbar = () => {
             <button
               type="button"
               className="dropdown-btn"
-              onClick={() => console.log("logout user")}
+              onClick={logoutUser}
               >
                 Logout
               </button>
