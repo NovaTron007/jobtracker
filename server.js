@@ -5,6 +5,7 @@ import cors from "cors" // enable req to to other servers
 import morgan from "morgan" // log HTTP requests and errors, and simplifies the process. 
 import notFoundMiddleware from "./middleware/notFoundMiddleware.js"
 import errorHandlerMiddleware from "./middleware/errorHandlerMiddleware.js"
+import authenticateUser from "./middleware/auth.js" // auth middleware
 import connectDB from "./config/dbConnect.js" // connect to mongodb
 
 // use express
@@ -24,7 +25,7 @@ app.use(cors())
 
 // Routes: prefix then use route file for endpoint
 app.use("/api/v1/auth", authRouter)
-app.use("/api/v1/jobs", jobsRouter)
+app.use("/api/v1/jobs", authenticateUser, jobsRouter)
 
 // Middleware
 app.use(notFoundMiddleware) // run if no route exists

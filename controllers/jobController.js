@@ -7,6 +7,7 @@ export const getAllJobs = (req, res) => {
 }
 
 export const updateJob = (req, res) => {
+    console.log("req.user: ", req.user)
     res.send("update user")
 }
 
