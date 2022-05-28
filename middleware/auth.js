@@ -4,6 +4,7 @@ import { CustomErrorMessage } from "../errors/index.js"
 const authenticateUser = async (req, res, next) => {
     // get token sent in headers
     const authHeader = req.headers.authorization
+
     if(!authHeader || !authHeader.startsWith("Bearer")) { // check header string ie: Bearer token
         throw new CustomErrorMessage("Authentication Invalid!")
     }
@@ -12,11 +13,14 @@ const authenticateUser = async (req, res, next) => {
     // compare tokens
     try {
         const decodedToken = jsonwebtoken.verify(token, process.env.JWT_SECRET) // userid, issue at, exp
-        req.user = { userId: decodedToken.id } // add to req object: set req.user to new object with id sent in token
+        // add to req object: set req.user to new object with id sent in token (req object sent in url)
+        req.user = { userId: decodedToken.id }
+        console.log("req.user: ",req.user)
+        next() // next middleware (controller in this case)
     } catch(err) {
         throw new CustomErrorMessage("Authentication Invalid!")
     }
-    next() // next middleware (controller in this case)
+
 }
 
 export default authenticateUser

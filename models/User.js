@@ -42,6 +42,10 @@ const UserSchema = new mongoose.Schema({
 
 // pre: before saving document
 UserSchema.pre("save", async function(){
+    // console.log("modifiedPaths:", this.modifiedPaths())
+
+    //update user: don't hash password twice
+    if(!this.isModified("password")) return
     // use bcrypt to generate salt
     const salt = await bcrypt.genSalt(10)
     // hash password with salt

@@ -22,7 +22,6 @@ export const register = async (req, res, next) => {
     const user = await User.create({ name, email, password })
 
     // create jwt
-    const token = user.createJWT()
 
     // response object
     res.status(StatusCodes.CREATED).json({
@@ -44,7 +43,7 @@ export const login = async (req, res) => {
 
    // get user from db
    const user = await User.findOne({email}).select("+password") // access password field: select is false in model
-   // console.log("login (user): ", user)
+   console.log("login (user): ", user)
    
    // check user
    if(!user) {
@@ -70,6 +69,29 @@ export const login = async (req, res) => {
    })
 }
 
-export const updateUser = (req, res) => {
-    res.send("update user")
+export const updateUser = async (req, res, next) => {
+    const { email, name, lastName, location } = req.body
+
+    if(!email || !name || !lastName || !location) {
+        throw new CustomErrorMessage("Please complete all fields!", StatusCodes.BAD_REQUEST)
+    }
+    // find user by id
+    const user = await User.findOne({_id: req.user.userId})
+    // set user fields
+    user.email = email,
+    user.name = name,
+    user.lastName = lastName,
+    user.location = location
+
+    // save user
+    await user.save()
+
+    // create fresh token
+    const token = await user.createJWT()
+
+    res.status(StatusCodes.OK).json({
+        user,
+        token,
+        location: user.location
+    })
 }
