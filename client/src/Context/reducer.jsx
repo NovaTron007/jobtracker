@@ -1,4 +1,6 @@
-import { DISPLAY_ALERT, CLEAR_ALERT, AUTH_USER, AUTH_USER_SUCCESS, AUTH_USER_ERROR, TOGGLE_SIDEBAR, LOGOUT_USER, UPDATE_USER } from "./actions"
+import { DISPLAY_ALERT, CLEAR_ALERT, 
+    AUTH_USER, AUTH_USER_SUCCESS, AUTH_USER_ERROR, TOGGLE_SIDEBAR, 
+    LOGOUT_USER, UPDATE_USER, UPDATE_USER_SUCCESS, UPDATE_USER_ERROR } from "./actions"
 
 // create reducer: initialState passed from AppContext ie: const [state, dispatch] = useReducer(reducer, initialState)
 const reducer = (state, action) => {
@@ -57,10 +59,30 @@ const reducer = (state, action) => {
             jobLocation: null 
             
         }
-    case UPDATE_USER:
+    case UPDATE_USER: 
         return {
             ...state,
+            isLoading: true
+        }
+    case UPDATE_USER_SUCCESS:
+        return {
+            ...state,
+            isLoading: false,
+            showAlert: true,
+            alertType: "success",
+            alertMessage: "User Profile updated!",
+            token:action.payload.token,
+            userLocation: action.payload.location,
+            jobLocation: action.payload.location,
             user: action.payload.user
+    }
+    case UPDATE_USER_ERROR: 
+        return {
+            ...state,
+            isLoading: false,
+            showAlert: true, 
+            alertType: "danger",
+            alertMessage: action.payload.alertMessage
     }
 
     default:

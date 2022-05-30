@@ -9,6 +9,7 @@ const Profile = () => {
     const { user, showAlert, displayAlert, isLoading, updateUser } = useAppContext()
 
     // load user details from (api -> set in global state) if any
+    console.log("user fed: ", user)
     const [name, setName] = useState(user?.name)
     const [lastName, setLastName] = useState(user?.lastName)
     const [location, setLocation] = useState(user?.location)
@@ -34,7 +35,7 @@ const Profile = () => {
                 {/* pass handleChange and get target value back from input */}
                 <div className="form-center">
                     <FormRow type="text" name="name" labelText="Name" value={name} handleChange={(e) => setName(e.target.value)} />
-                    <FormRow type="text" name="lastname" labelText="Last Name" value={lastName} handleChange={(e) => setLastName(e.target.value)} />
+                    <FormRow type="text" name="lastName" labelText="Last Name" value={lastName} handleChange={(e) => setLastName(e.target.value)} />
                     <FormRow type="email" name="email" labelText="Email" value={email} handleChange={(e) => setEmail(e.target.value)} />
                     <FormRow type="text" name="location" labelText="location" value={location} handleChange={(e) => setLocation(e.target.value)} />
                 

@@ -1,3 +1,4 @@
+import { StatusCodes } from "http-status-codes"
 import jsonwebtoken from "jsonwebtoken"
 import { CustomErrorMessage } from "../errors/index.js"
 
@@ -6,7 +7,7 @@ const authenticateUser = async (req, res, next) => {
     const authHeader = req.headers.authorization
 
     if(!authHeader || !authHeader.startsWith("Bearer")) { // check header string ie: Bearer token
-        throw new CustomErrorMessage("Authentication Invalid!")
+        throw new CustomErrorMessage("Authentication Invalid!", StatusCodes.UNAUTHORIZED)
     }
     // get token part convert to array and split at space: Bearer token
     const token = authHeader.split(" ")[1]

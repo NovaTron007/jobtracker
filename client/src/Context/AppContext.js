@@ -1,7 +1,11 @@
 import React, { useContext, useReducer } from "react" // use hooks
 import axios from "axios" // axios (allow XMLHttpRequests)
 import reducer from "./reducer" // import our reducer
-import { CLEAR_ALERT, DISPLAY_ALERT, AUTH_USER, AUTH_USER_SUCCESS, AUTH_USER_ERROR, TOGGLE_SIDEBAR, LOGOUT_USER, UPDATE_USER } from "./actions"
+import { 
+    CLEAR_ALERT, DISPLAY_ALERT, AUTH_USER, 
+    AUTH_USER_SUCCESS, AUTH_USER_ERROR, TOGGLE_SIDEBAR, LOGOUT_USER, 
+    UPDATE_USER, UPDATE_USER_SUCCESS, UPDATE_USER_ERROR 
+} from "./actions"
 
 
 
@@ -48,7 +52,39 @@ const AppProvider = ({children}) => {
     
     // set state: use dispatch for useReducer (accepts the reducer, initialState)
     const [state, dispatch] = useReducer(reducer, initialState)
-    
+
+    // sending bearer token in every request (we won't use this)
+    // axios.defaults.headers.common["Authorization"] = `Bearer ${state.token}`
+
+    // AXIOS
+    // axios instance for making requests with options ie sending bearer token
+    const authFetch = axios.create({
+        baseURL: "/api/v1"
+    })
+
+    // request interceptor: send token to server
+    authFetch.interceptors.request.use((config) => {
+        config.headers.common["Authorization"] = `Bearer ${state.token}`
+        return config
+    }, (err) => {
+            return Promise.reject(err)
+        }
+    )
+
+    // response interceptor 
+    authFetch.interceptors.response.use((response) => {
+        return response
+    }, (err) => {
+        // check err response status set in class
+        if(err.response.status === 401) {
+            logoutUser()
+        }
+        return Promise.reject(err)
+      }
+    )
+
+
+    // ACTIONS:
     // dispatch actions from  reducer: to control state
     const displayAlert = () => {
         // dispatch action
@@ -109,19 +145,41 @@ const AppProvider = ({children}) => {
     // logout
     const logoutUser = () => {
         dispatch({
-            type: LOGOUT_USER 
+            type: LOGOUT_USER
         })
         // clear storage
         removeUserFromLocalStorage()
     }
 
-    const updateUser = async (user) => {
-        dispatch({
-            type: UPDATE_USER,
-            isLoading: true,
-            payload: {user: user},
-        })
-        console.log("updateUser", user)
+    const updateUser = async (currentUser) => {
+        // dispatch action
+        dispatch({type: UPDATE_USER})
+
+        try {
+            // destructure response.data from axios response
+            const { data } = await authFetch.patch("/auth/updateUser/", currentUser)
+            // destructure data
+            const { user, location, token } = data
+            // dispatch action
+            dispatch({
+                type: UPDATE_USER_SUCCESS,
+                payload: { user, location, token } // payload object
+            })
+            // update localstorage
+            addUserToLocalStorage({user, location, token})
+
+        } catch(err) {
+            console.log("err updateUser: ", err.response.data)
+            // user logged in
+            if(err !== 401) {
+                dispatch({ 
+                    type: UPDATE_USER_ERROR,
+                    payload: { alertMessage: err.response.data.message }
+                })
+            }
+        }
+        // clear alert
+        clearAlert()
     }
 
 

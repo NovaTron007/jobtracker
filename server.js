@@ -11,7 +11,7 @@ import connectDB from "./config/dbConnect.js" // connect to mongodb
 // use express
 const app = express()
 // use dotenv (use path obj for specific folder)
-dotenv.config({path: "./config/.env"}) // load .env before other files that use them
+dotenv.config({path: "./config/config.env"}) // load .env before other files that use them
 
 // import route files (calls controller)
 import authRouter from "./routes/authRoutes.js"
