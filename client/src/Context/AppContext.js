@@ -1,7 +1,7 @@
 import React, { useContext, useReducer } from "react" // use hooks
 import axios from "axios" // axios (allow XMLHttpRequests)
 import reducer from "./reducer" // import our reducer
-import { CLEAR_ALERT, DISPLAY_ALERT, AUTH_USER, AUTH_USER_SUCCESS, AUTH_USER_ERROR, TOGGLE_SIDEBAR, LOGOUT_USER } from "./actions"
+import { CLEAR_ALERT, DISPLAY_ALERT, AUTH_USER, AUTH_USER_SUCCESS, AUTH_USER_ERROR, TOGGLE_SIDEBAR, LOGOUT_USER, UPDATE_USER } from "./actions"
 
 
 
@@ -115,10 +115,19 @@ const AppProvider = ({children}) => {
         removeUserFromLocalStorage()
     }
 
+    const updateUser = async (user) => {
+        dispatch({
+            type: UPDATE_USER,
+            isLoading: true,
+            payload: {user: user},
+        })
+        console.log("updateUser", user)
+    }
+
 
     return (
         // provide state, actions to child components
-        <AppContext.Provider value={{...state, displayAlert, clearAlert, authUser, toggleSidebar, logoutUser }}>{children}</AppContext.Provider>
+        <AppContext.Provider value={{...state, displayAlert, clearAlert, authUser, toggleSidebar, logoutUser, updateUser }}>{children}</AppContext.Provider>
     )
 }
 
