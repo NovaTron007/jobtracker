@@ -43,8 +43,7 @@ export const login = async (req, res) => {
 
    // get user from db
    const user = await User.findOne({email}).select("+password") // access password field: select is false in model
-   console.log("login (user): ", user)
-   
+
    // check user
    if(!user) {
        throw new CustomErrorMessage("Invalid credentials", StatusCodes.UNAUTHORIZED)
