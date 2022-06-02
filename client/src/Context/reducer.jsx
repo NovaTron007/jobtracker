@@ -1,11 +1,15 @@
 import { DISPLAY_ALERT, CLEAR_ALERT, 
     AUTH_USER, AUTH_USER_SUCCESS, AUTH_USER_ERROR, TOGGLE_SIDEBAR, 
-    LOGOUT_USER, UPDATE_USER, UPDATE_USER_SUCCESS, UPDATE_USER_ERROR } from "./actions"
+    LOGOUT_USER, UPDATE_USER, UPDATE_USER_SUCCESS, UPDATE_USER_ERROR,
+    HANDLE_CHANGE, CLEAR_FORM_VALUES
+} from "./actions"
 
 // create reducer: initialState passed from AppContext ie: const [state, dispatch] = useReducer(reducer, initialState)
 const reducer = (state, action) => {
+console.log("action.payload: ", action.payload)
+console.log("action.payload: ", typeof action.payload)
 
-    switch(action.type) {
+switch(action.type) {
     case DISPLAY_ALERT:
         return {
             ...state, 
@@ -75,7 +79,7 @@ const reducer = (state, action) => {
             userLocation: action.payload.location,
             jobLocation: action.payload.location,
             user: action.payload.user
-    }
+        }
     case UPDATE_USER_ERROR: 
         return {
             ...state,
@@ -83,7 +87,24 @@ const reducer = (state, action) => {
             showAlert: true, 
             alertType: "danger",
             alertMessage: action.payload.alertMessage
-    }
+        }
+    case HANDLE_CHANGE: 
+        return {
+            ...state,
+            [action.payload.name]: action.payload.value // initial state key name: set value
+        }
+    case CLEAR_FORM_VALUES: 
+        // update state
+        return {
+            ...state, 
+            isEditing: false,
+            editJobId: "",
+            position: "",
+            company: "",
+            status: "full-time",
+            jobType: "pending",
+            jobLocation: state.userLocation, // use default userLocation in state
+        }
 
     default:
         throw new Error(`No such action ${action.type}.`)

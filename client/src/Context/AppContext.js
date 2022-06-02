@@ -4,7 +4,9 @@ import reducer from "./reducer" // import our reducer
 import { 
     CLEAR_ALERT, DISPLAY_ALERT, AUTH_USER, 
     AUTH_USER_SUCCESS, AUTH_USER_ERROR, TOGGLE_SIDEBAR, LOGOUT_USER, 
-    UPDATE_USER, UPDATE_USER_SUCCESS, UPDATE_USER_ERROR 
+    UPDATE_USER, UPDATE_USER_SUCCESS, UPDATE_USER_ERROR,
+    ADD_JOB, ADD_JOB_SUCCESS, ADD_JOB_ERROR,
+    HANDLE_CHANGE, CLEAR_FORM_VALUES
 } from "./actions"
 
 
@@ -45,7 +47,7 @@ const initialState = {
     jobTypeOptions: ["full-time", "part-time", "freelance", "remote"],
     jobType: "full-time",
     statusOptions: ["interview", "declined", "pending"],
-    status: "pending"   
+    status: "pending"
 }
 
 // create context
@@ -94,10 +96,11 @@ const AppProvider = ({children}) => {
 
 
     // ACTIONS:
+    
     // dispatch actions from  reducer: to control state
     const displayAlert = () => {
-        // dispatch action
-        dispatch({type: DISPLAY_ALERT})
+        // dispatch action display alert w/default error message in reducer
+        dispatch({type: DISPLAY_ALERT}) 
         // clear alert
         clearAlert()
     }
@@ -160,6 +163,7 @@ const AppProvider = ({children}) => {
         removeUserFromLocalStorage()
     }
 
+    // update user
     const updateUser = async (currentUser) => {
         // dispatch action
         dispatch({type: UPDATE_USER})
@@ -191,10 +195,31 @@ const AppProvider = ({children}) => {
         clearAlert()
     }
 
+    // input change
+    const handleChangeGlobal = ({name, value}) => {
+        // add job
+        dispatch({
+            type: HANDLE_CHANGE,
+            payload: { name, value }
+        })
+    }
+
+    // clear values
+    const clearFormValues = () => {
+        dispatch({
+             type: CLEAR_FORM_VALUES
+        })
+    }
+
 
     return (
         // provide state, actions to child components
-        <AppContext.Provider value={{...state, displayAlert, clearAlert, authUser, toggleSidebar, logoutUser, updateUser }}>{children}</AppContext.Provider>
+        <AppContext.Provider value={{
+            ...state, 
+            displayAlert, clearAlert, toggleSidebar, 
+            authUser, logoutUser, updateUser,
+            handleChangeGlobal, clearFormValues
+        }}>{children}</AppContext.Provider>
     )
 }
 
