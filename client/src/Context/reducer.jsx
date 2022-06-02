@@ -1,7 +1,8 @@
 import { DISPLAY_ALERT, CLEAR_ALERT, 
     AUTH_USER, AUTH_USER_SUCCESS, AUTH_USER_ERROR, TOGGLE_SIDEBAR, 
     LOGOUT_USER, UPDATE_USER, UPDATE_USER_SUCCESS, UPDATE_USER_ERROR,
-    HANDLE_CHANGE, CLEAR_FORM_VALUES
+    HANDLE_CHANGE, CLEAR_FORM_VALUES,
+    CREATE_JOB, CREATE_JOB_SUCCESS, CREATE_JOB_ERROR
 } from "./actions"
 
 // create reducer: initialState passed from AppContext ie: const [state, dispatch] = useReducer(reducer, initialState)
@@ -94,17 +95,55 @@ switch(action.type) {
             [action.payload.name]: action.payload.value // initial state key name: set value
         }
     case CLEAR_FORM_VALUES: 
-        // update state
-        return {
-            ...state, 
+        const initialState = {
+            // update state
             isEditing: false,
             editJobId: "",
             position: "",
             company: "",
-            status: "full-time",
-            jobType: "pending",
             jobLocation: state.userLocation, // use default userLocation in state
+            jobType: "full-time",
+            status: "pending"
         }
+        // return updated state
+        return {
+            ...state, 
+            ...initialState
+
+            // also ok:
+            // isEditing: false,
+            // editJobId: "",
+            // position: "",
+            // company: "",
+            // jobLocation: state.userLocation, // use default userLocation in state
+            // jobType: "full-time",
+            // status: "pending"
+
+        }
+    case CREATE_JOB: 
+        // init
+        return {
+            ...state,
+            isLoading: true
+        }
+    case CREATE_JOB_SUCCESS:
+        // update state
+        return {
+            ...state,
+            isLoading: false, 
+            showAlert: true,
+            alertType: "success",
+            alertMessage: "Job Created!"
+        }
+    case CREATE_JOB_ERROR:
+            // update state
+            return {
+                ...state,
+                isLoading: false, 
+                showAlert: true,
+                alertType: "danger",
+                alertMessage: action.payload.message // get error message from api set in payload
+            }        
 
     default:
         throw new Error(`No such action ${action.type}.`)

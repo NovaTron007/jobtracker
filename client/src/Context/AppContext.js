@@ -5,7 +5,7 @@ import {
     CLEAR_ALERT, DISPLAY_ALERT, AUTH_USER, 
     AUTH_USER_SUCCESS, AUTH_USER_ERROR, TOGGLE_SIDEBAR, LOGOUT_USER, 
     UPDATE_USER, UPDATE_USER_SUCCESS, UPDATE_USER_ERROR,
-    ADD_JOB, ADD_JOB_SUCCESS, ADD_JOB_ERROR,
+    CREATE_JOB, CREATE_JOB_SUCCESS, CREATE_JOB_ERROR,
     HANDLE_CHANGE, CLEAR_FORM_VALUES
 } from "./actions"
 
@@ -30,15 +30,18 @@ const removeUserFromLocalStorage = () => {
 
 // global state
 const initialState = {
+    // loading and alerts
     isLoading: false, 
-    showAlert: false, 
+    showAlert: false,
     alertMessage: "",
     alertType: "",
+    // UI
+    showSidebar: false,
+    // user
     user: user ? JSON.parse(user) : null, // parse object from storage
     token: token ? token : null,
     userLocation: userLocation || null,
     jobLocation: userLocation || null,
-    showSidebar: false,
     // job state
     isEditing: false,
     editJobId: "",
@@ -110,7 +113,7 @@ const AppProvider = ({children}) => {
         setTimeout(() => {
             // dispatch action
             dispatch({type: CLEAR_ALERT})
-        }, 2000);
+        }, 1000);
     }
 
     // register user: submit data to api, destructure object
@@ -211,6 +214,41 @@ const AppProvider = ({children}) => {
         })
     }
 
+    // create job
+    const createJob = async () => {
+        // init 
+        dispatch({type: CREATE_JOB})
+        // get state
+        try {
+            // get state
+            const { position, company, jobLocation, jobType, status } = state
+            // send data
+            await authFetch.post("/jobs/", {
+                position,
+                company,
+                jobLocation, 
+                jobType, 
+                status
+            })
+            // success
+            dispatch({type: CREATE_JOB_SUCCESS})
+            // clear form
+            dispatch({type: CLEAR_FORM_VALUES})
+        }
+        catch(err) {
+            console.log("err: ", err)
+            // not authorised: return (interceptor will logout user)
+            if(err.response.status === 401) return
+            // show api error if frontend not caught
+            dispatch({
+                type: CREATE_JOB_ERROR,
+                payload: { alertMessage:  err.response.data.message}     
+            })
+        }
+        // show alert
+        clearAlert()
+    }
+
 
     return (
         // provide state, actions to child components
@@ -218,7 +256,8 @@ const AppProvider = ({children}) => {
             ...state, 
             displayAlert, clearAlert, toggleSidebar, 
             authUser, logoutUser, updateUser,
-            handleChangeGlobal, clearFormValues
+            handleChangeGlobal, clearFormValues,
+            createJob
         }}>{children}</AppContext.Provider>
     )
 }

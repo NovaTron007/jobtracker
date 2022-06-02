@@ -7,9 +7,9 @@ import FormRowSelect from '../../Components/FormRowSelect'
 
 const AddJob = () => {
   // get state
-  const { displayAlert, showAlert, isLoading, isEditing, editJobId, position, 
+  const { displayAlert, showAlert, isEditing, position, 
         company, jobLocation, jobTypeOptions, jobType, statusOptions, status, 
-        handleChangeGlobal, clearFormValues } = useAppContext()
+        handleChangeGlobal, clearFormValues, createJob } = useAppContext()
 
   // local handleChange: update state in context
   const handleChange = (e) => {
@@ -21,17 +21,24 @@ const AddJob = () => {
 
   // submit
   const handleSubmit = (e) => {
-    console.log("handleSubmit")
-    e.preventDefault()
-    if(!position || !company )
-      // context function will dispatch action and update state to showAlert
-      displayAlert()
-      return
-    }
+	e.preventDefault()
+	if(!position || !company || !jobLocation) {
+		// context function will dispatch action and update state to showAlert
+		displayAlert()
+		return
+	}
+	// context function
+	if(isEditing) {
+		// edit job later
+		return
+	}
+	createJob()
+   }
 
     // clear form
     const clearForm = (e) => {
       e.preventDefault()
+	  // context function
       clearFormValues()
     }
   
@@ -43,7 +50,7 @@ const AddJob = () => {
 
         {showAlert && <Alert />}
 
-        <h3>Add job/Edit Job</h3>
+        <h3>{isEditing ? "Edit Job" : "Add job"}</h3>
 
         <div className="form-center">
           <FormRow type="text" name="position" labelText="Position" value={position} handleChange={handleChange} />
@@ -53,7 +60,7 @@ const AddJob = () => {
           <FormRowSelect type="select" name="jobType" labelText="Job Type" list={jobTypeOptions} value={jobType} handleChange={handleChange} />
           <FormRowSelect type="select" name="status" labelText="Status" list={statusOptions} value={status} handleChange={handleChange} />
           <div className="btn-container">
-            <button className="btn btn-block">Submit</button>
+            <button className="btn btn-block" type="submit">Submit</button>
             <button className="btn btn-block clear-btn" onClick={clearForm}>Clear</button>
           </div>
         </div>

@@ -2,7 +2,7 @@ import { StatusCodes } from "http-status-codes"
 
 
 const errorHandlerMiddleware = (err, req, res, next) => {
-    console.log(err.message) // access js error object: throw new Error("Please provide all values")
+    console.log("err.message: ", err.message) // access js error object: throw new Error("Please provide all values")
     
     // create object for errors: check if set statusCode js Error object
     const defaultError = {
@@ -28,7 +28,7 @@ const errorHandlerMiddleware = (err, req, res, next) => {
     // response
     res.status(defaultError.statusCode).json({
         message: defaultError.message, 
-        errObj: err
+        statusCode: defaultError.statusCode
     })
 }
 
