@@ -2,7 +2,7 @@ import { DISPLAY_ALERT, CLEAR_ALERT,
     AUTH_USER, AUTH_USER_SUCCESS, AUTH_USER_ERROR, TOGGLE_SIDEBAR, 
     LOGOUT_USER, UPDATE_USER, UPDATE_USER_SUCCESS, UPDATE_USER_ERROR,
     HANDLE_CHANGE, CLEAR_FORM_VALUES,
-    CREATE_JOB, CREATE_JOB_SUCCESS, CREATE_JOB_ERROR
+    CREATE_JOB, CREATE_JOB_SUCCESS, CREATE_JOB_ERROR, GET_JOBS, GET_JOBS_SUCCESS
 } from "./actions"
 
 // create reducer: initialState passed from AppContext ie: const [state, dispatch] = useReducer(reducer, initialState)
@@ -143,7 +143,19 @@ switch(action.type) {
                 showAlert: true,
                 alertType: "danger",
                 alertMessage: action.payload.message // get error message from api set in payload
-            }        
+            }
+    case GET_JOBS: 
+        return {
+            ...state, 
+            isLoading: true
+    }
+    case GET_JOBS_SUCCESS: 
+        return {
+            ...state, 
+            isLoading: false, 
+            jobs: action.payload.jobs,
+            totalJobs: action.payload.totalJobs,
+            totalPages: action.payload.totalPages        }      
 
     default:
         throw new Error(`No such action ${action.type}.`)

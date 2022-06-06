@@ -6,3 +6,4 @@
 - add proxy to package.json
 - npm install axios
 - npm install react-icons
+- npm install moment

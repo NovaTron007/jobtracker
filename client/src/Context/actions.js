@@ -17,5 +17,8 @@ export const CREATE_JOB="CREATE_JOB"
 export const CREATE_JOB_SUCCESS="CREATE_JOB_SUCCESS"
 export const CREATE_JOB_ERROR="CREATE_JOB_ERROR"
 // form change
+export const GET_JOBS="GET_JOBS"
+export const GET_JOBS_SUCCESS="GET_JOBS_SUCCESS"
+// form change
 export const HANDLE_CHANGE="HANDLE_CHANGE"
 export const CLEAR_FORM_VALUES="CLEAR_FORM_VALUES"

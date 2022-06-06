@@ -22,8 +22,18 @@ export const createJob = async (req, res) => {
 
 }
 
-export const getAllJobs = (req, res) => {
-    res.send("get all jobs")
+export const getAllJobs = async (req, res) => {
+    const jobs = await Job.find({createdBy: req.user.userId})
+    if(!jobs) {
+        throw new CustomErrorMessage("No jobs found with that user.", StatusCodes.BAD_REQUEST)
+    }
+    // response 
+    res.status(StatusCodes.OK).json({
+        success: true, 
+        jobs,
+        totalJobs: jobs.length,
+        totalPages: 1
+    })
 }
 
 export const updateJob = (req, res) => {
