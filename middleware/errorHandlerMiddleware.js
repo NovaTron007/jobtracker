@@ -25,6 +25,12 @@ const errorHandlerMiddleware = (err, req, res, next) => {
         defaultError.message = `${Object.keys(err.keyValue)} must be unique` 
     }
 
+    // mongoose format error
+    if(err.name === "CastError") {
+        defaultError.statusCode = StatusCodes.BAD_REQUEST
+        defaultError.message = `Resource not found with id: ${err.value}`
+    }
+
     // response
     res.status(defaultError.statusCode).json({
         message: defaultError.message, 
