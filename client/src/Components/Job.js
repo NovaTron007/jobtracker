@@ -31,7 +31,7 @@ function Job({_id, company, position, jobLocation, status, jobType, createdAt}) 
 		  </div>
 		  <footer>
 			  <div className="actions">
-				<Link to="/add-job" className="btn edit-btn" onClick={() => setEditJob(_id)}>Edit</Link>
+				<Link to="/add-job" className="btn edit-btn" onClick={() => setEditJob(_id)}>Edit</Link> {/* pass id to edit */}
 				<button className="btn delete-btn" onClick={() => deleteJob(_id)}>Delete</button>
 			  </div>
 		  </footer>

@@ -16,6 +16,7 @@ export const TOGGLE_SIDEBAR = "TOGGLE_SIDEBAR"
 export const CREATE_JOB="CREATE_JOB"
 export const CREATE_JOB_SUCCESS="CREATE_JOB_SUCCESS"
 export const CREATE_JOB_ERROR="CREATE_JOB_ERROR"
+export const SET_EDIT_JOB="SET_EDIT_JOB"
 // form change
 export const GET_JOBS="GET_JOBS"
 export const GET_JOBS_SUCCESS="GET_JOBS_SUCCESS"

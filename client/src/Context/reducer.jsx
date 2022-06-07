@@ -2,14 +2,15 @@ import { DISPLAY_ALERT, CLEAR_ALERT,
     AUTH_USER, AUTH_USER_SUCCESS, AUTH_USER_ERROR, TOGGLE_SIDEBAR, 
     LOGOUT_USER, UPDATE_USER, UPDATE_USER_SUCCESS, UPDATE_USER_ERROR,
     HANDLE_CHANGE, CLEAR_FORM_VALUES,
-    CREATE_JOB, CREATE_JOB_SUCCESS, CREATE_JOB_ERROR, GET_JOBS, GET_JOBS_SUCCESS
+    CREATE_JOB, CREATE_JOB_SUCCESS, CREATE_JOB_ERROR, GET_JOBS, GET_JOBS_SUCCESS,
+    SET_EDIT_JOB
 } from "./actions"
 
 // create reducer: initialState passed from AppContext ie: const [state, dispatch] = useReducer(reducer, initialState)
 const reducer = (state, action) => {
 console.log("action.payload: ", action.payload)
-console.log("action.payload: ", typeof action.payload)
 
+// switch action passed in
 switch(action.type) {
     case DISPLAY_ALERT:
         return {
@@ -155,7 +156,24 @@ switch(action.type) {
             isLoading: false, 
             jobs: action.payload.jobs,
             totalJobs: action.payload.totalJobs,
-            totalPages: action.payload.totalPages        }      
+            totalPages: action.payload.totalPages        
+        }      
+    case SET_EDIT_JOB: 
+        // get job of id passed in payload
+        const job = state.jobs.find((item) => item._id === action.payload.id)
+        // destructure fields
+        const { _id, position, company, status, jobType, jobLocation } = job
+        // updated state for add/edit job fields
+        return {
+            ...state,
+            editJobId: _id, 
+            isEditing: true,
+            position,
+            company, 
+            status, 
+            jobType, 
+            jobLocation
+        }
 
     default:
         throw new Error(`No such action ${action.type}.`)
