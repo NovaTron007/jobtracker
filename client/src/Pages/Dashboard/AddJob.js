@@ -9,7 +9,7 @@ const AddJob = () => {
   // get state
   const { displayAlert, showAlert, isEditing, position, 
         company, jobLocation, jobTypeOptions, jobType, statusOptions, status, 
-        handleChangeGlobal, clearFormValues, createJob } = useAppContext()
+        handleChangeGlobal, clearFormValues, createJob, editJob } = useAppContext()
 
   // local handleChange: update state in context
   const handleChange = (e) => {
@@ -21,24 +21,25 @@ const AddJob = () => {
 
   // submit
   const handleSubmit = (e) => {
-	e.preventDefault()
-	if(!position || !company || !jobLocation) {
-		// context function will dispatch action and update state to showAlert
-		displayAlert()
-		return
-	}
-	// context function
-	if(isEditing) {
-		// edit job later
-		return
-	}
-	createJob()
+    e.preventDefault()
+    if(!position || !company || !jobLocation) {
+      // context function will dispatch action and update state to showAlert
+      displayAlert()
+      return
+    }
+    // context function: edit job on submit
+    if(isEditing) {
+      editJob()
+      return
+    }
+    // context functions: create job on submit
+    createJob()
    }
 
     // clear form
     const clearForm = (e) => {
       e.preventDefault()
-	  // context function
+    // context function
       clearFormValues()
     }
   
@@ -52,6 +53,7 @@ const AddJob = () => {
 
         <h3>{isEditing ? "Edit Job" : "Add job"}</h3>
 
+        {/* fill in fields with state */}
         <div className="form-center">
           <FormRow type="text" name="position" labelText="Position" value={position} handleChange={handleChange} />
           <FormRow type="text" name="company" labelText="Company" value={company} handleChange={handleChange} />

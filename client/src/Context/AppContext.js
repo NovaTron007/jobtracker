@@ -7,7 +7,7 @@ import {
     UPDATE_USER, UPDATE_USER_SUCCESS, UPDATE_USER_ERROR,
     CREATE_JOB, CREATE_JOB_SUCCESS, CREATE_JOB_ERROR,
     GET_JOBS, GET_JOBS_SUCCESS,
-    HANDLE_CHANGE, CLEAR_FORM_VALUES
+    HANDLE_CHANGE, CLEAR_FORM_VALUES, SET_EDIT_JOB
 } from "./actions"
 
 
@@ -279,11 +279,19 @@ const AppProvider = ({children}) => {
         clearAlert()
     }
 
-    // set job
+    // set job to edit
     const setEditJob = (id) => {
         console.log("set editJob id: ", id)
+        dispatch({
+            type: SET_EDIT_JOB, 
+            payload: {id} 
+        })
     }
 
+    // edit job
+    const editJob = () => {
+        console.log("edit job")
+    }
     // delete job
     const deleteJob = (id) => {
         console.log("deleteJob, id:", id)
@@ -301,7 +309,7 @@ const AppProvider = ({children}) => {
             displayAlert, clearAlert, toggleSidebar, 
             authUser, logoutUser, updateUser,
             handleChangeGlobal, clearFormValues,
-            createJob, getJobs, setEditJob, deleteJob
+            createJob, getJobs, setEditJob, editJob, deleteJob
         }}>{children}</AppContext.Provider>
     )
 }
