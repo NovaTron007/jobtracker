@@ -2,6 +2,7 @@ import Job from "../models/Job.js"
 import { StatusCodes } from "http-status-codes"
 import { CustomErrorMessage } from "../errors/index.js"
 import checkPermission from "../utils/checkPermission.js"
+import mongoose from "mongoose"
 
 
 export const createJob = async (req, res) => {
@@ -87,6 +88,31 @@ export const deleteJob = async (req, res) => {
     })
 }
 
-export const showStats = (req, res) => {
-    res.send("show stats")
+// show stats: aggregate pipeline, get jobs by user createdBy, group and count each status values
+export const showStats = async (req, res) => {
+    // returns array with objects in response
+    let stats = await Job.aggregate([
+        { 
+            $match: { createdBy: mongoose.Types.ObjectId(req.user.userId) } 
+        },
+        { 
+            $group: { _id: `$status`, count: {$sum: 1 } } // result: { "stats": [{ "_id": "interview", "count": 9 }, ..etc } rename id as status
+        }
+    ])
+    // reduce and total up status
+    stats = stats.reduce((acc, item) => { 
+        const { _id: status, count } = item
+        console.log("status: ", status)
+        console.log("count:", count)
+        console.log("acc: ", acc)
+        acc[status] = count
+        console.log("acc[status]:", acc[status])
+
+        return acc
+    }, {})
+
+    res.status(StatusCodes.OK).json({
+        success: true, 
+        stats
+    })
 }
