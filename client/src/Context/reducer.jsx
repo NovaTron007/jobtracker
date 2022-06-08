@@ -3,7 +3,7 @@ import { DISPLAY_ALERT, CLEAR_ALERT,
     LOGOUT_USER, UPDATE_USER, UPDATE_USER_SUCCESS, UPDATE_USER_ERROR,
     HANDLE_CHANGE, CLEAR_FORM_VALUES,
     CREATE_JOB, CREATE_JOB_SUCCESS, CREATE_JOB_ERROR, GET_JOBS, GET_JOBS_SUCCESS,
-    SET_EDIT_JOB
+    SET_EDIT_JOB, DELETE_JOB, DELETE_JOB_SUCCESS
 } from "./actions"
 
 // create reducer: initialState passed from AppContext ie: const [state, dispatch] = useReducer(reducer, initialState)
@@ -12,6 +12,7 @@ console.log("action.payload: ", action.payload)
 
 // switch action passed in
 switch(action.type) {
+    // ALERT REDUCERS
     case DISPLAY_ALERT:
         return {
             ...state, 
@@ -19,7 +20,6 @@ switch(action.type) {
             alertType: "danger",
             alertMessage: "Please provide all values"
         }
-    
     case CLEAR_ALERT:
         return {
             ...state,
@@ -27,6 +27,7 @@ switch(action.type) {
             alertType: "",
             alertMessage: ""
         }
+    // AUTH REDUCERS
     case AUTH_USER:
         return {
             ...state, 
@@ -56,6 +57,7 @@ switch(action.type) {
             ...state,
             showSidebar: !state.showSidebar // access initialState object
         }
+    // USER REDUCERS
     case LOGOUT_USER:
         return {
             ...state,
@@ -90,6 +92,7 @@ switch(action.type) {
             alertType: "danger",
             alertMessage: action.payload.alertMessage
         }
+    // FORM REDUCERS
     case HANDLE_CHANGE: 
         return {
             ...state,
@@ -121,6 +124,8 @@ switch(action.type) {
             // status: "pending"
 
         }
+
+    // JOB REDUCERS
     case CREATE_JOB: 
         // init
         return {
@@ -173,6 +178,18 @@ switch(action.type) {
             status, 
             jobType, 
             jobLocation
+        }
+    case DELETE_JOB: 
+        return {
+            ...state, 
+            isLoading: true
+        }
+    case DELETE_JOB_SUCCESS: 
+        return {
+            ...state, 
+            isLoading: false,
+            alertType: "success",
+            alertMessage: "Job Created!"
         }
 
     default:

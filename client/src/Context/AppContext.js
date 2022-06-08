@@ -7,7 +7,8 @@ import {
     UPDATE_USER, UPDATE_USER_SUCCESS, UPDATE_USER_ERROR,
     CREATE_JOB, CREATE_JOB_SUCCESS, CREATE_JOB_ERROR,
     GET_JOBS, GET_JOBS_SUCCESS,
-    HANDLE_CHANGE, CLEAR_FORM_VALUES, SET_EDIT_JOB
+    HANDLE_CHANGE, CLEAR_FORM_VALUES, SET_EDIT_JOB,
+    DELETE_JOB, DELETE_JOB_SUCCESS
 } from "./actions"
 
 
@@ -292,11 +293,31 @@ const AppProvider = ({children}) => {
     const editJob = () => {
         console.log("edit job")
     }
+
     // delete job
-    const deleteJob = (id) => {
-        console.log("deleteJob, id:", id)
+    const deleteJob = async (id) => {
+        // init
+        dispatch({
+            type: DELETE_JOB
+        })
+
+        // delete request
+        try {
+            // delete with id
+            await authFetch.delete(`/jobs/${id}`)
+            // dispatch
+            dispatch({
+                type: DELETE_JOB_SUCCESS
+            }) 
+            // refresh jobs
+            getJobs()
+        } catch (err) {
+            console.log(err)
+            // logoutUser()
+        }
     }
 
+    // get jobs on render
     useEffect(() => {
         getJobs()
     }, [])
