@@ -1,5 +1,6 @@
 # backend setup
 - cd root then npm init
+- node seeder to import mock data
 - npm install nodemon -D
 - npm install express
 - npm install dotenv
