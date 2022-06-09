@@ -99,16 +99,13 @@ export const showStats = async (req, res) => {
             $group: { _id: `$status`, count: {$sum: 1 } } // result: { "stats": [{ "_id": "interview", "count": 9 }, ..etc } rename id as status
         }
     ])
-    // reduce and total up status
+    // reduce stats into single object
     stats = stats.reduce((acc, item) => { 
-        const { _id: status, count } = item
-        console.log("status: ", status)
-        console.log("count:", count)
-        console.log("acc: ", acc)
-        acc[status] = count
-        console.log("acc[status]:", acc[status])
-
+        const { _id: status, count } = item // destructure and rename
+        acc[status] = count // set status key value to count ie 9, so in object: declined: 9
         return acc
+        // console.log(acc) = acc: { declined: 12, interview: 9, pending: 9 }
+        // console.log(acc[status]) = 9        
     }, {})
 
     res.status(StatusCodes.OK).json({
