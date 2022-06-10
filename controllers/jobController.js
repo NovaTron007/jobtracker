@@ -102,14 +102,24 @@ export const showStats = async (req, res) => {
     // reduce stats into single object
     stats = stats.reduce((acc, item) => { 
         const { _id: status, count } = item // destructure and rename
-        acc[status] = count // set status key value to count ie 9, so in object: declined: 9
+        acc[status] = count // dynamac keys: set status as key name, it's value to count ie 9, so in object: declined: 9
         return acc
         // console.log(acc) = acc: { declined: 12, interview: 9, pending: 9 }
         // console.log(acc[status]) = 9        
     }, {})
+    
+    // create response object with default 0 if no job created from user
+    const defaultStats = {
+        pending: stats.pending || 0, // default to avoid error
+        interview: stats.interview || 0,
+        declined: stats.declined || 0
+    }
+    // monthly applications
+    let monthyApplications = []
 
     res.status(StatusCodes.OK).json({
         success: true, 
-        stats
+        defaultStats,
+        monthyApplications
     })
 }
