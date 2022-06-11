@@ -3,7 +3,7 @@ import { DISPLAY_ALERT, CLEAR_ALERT,
     LOGOUT_USER, UPDATE_USER, UPDATE_USER_SUCCESS, UPDATE_USER_ERROR,
     HANDLE_CHANGE, CLEAR_FORM_VALUES,
     CREATE_JOB, CREATE_JOB_SUCCESS, CREATE_JOB_ERROR, GET_JOBS, GET_JOBS_SUCCESS,
-    SET_EDIT_JOB, DELETE_JOB, DELETE_JOB_SUCCESS
+    SET_EDIT_JOB, DELETE_JOB, DELETE_JOB_SUCCESS, GET_STATS, GET_STATS_SUCCESS
 } from "./actions"
 
 // create reducer: initialState passed from AppContext ie: const [state, dispatch] = useReducer(reducer, initialState)
@@ -190,6 +190,19 @@ switch(action.type) {
             isLoading: false,
             alertType: "success",
             alertMessage: "Job Created!"
+        }
+    // stats
+    case GET_STATS: 
+        return {
+            ...state, 
+            isLoading: true
+        }
+    case GET_STATS_SUCCESS: 
+        return {
+            ...state,
+            isLoading: false,
+            stats: action.payload.stats,
+            monthlyApplications: action.payload.monthlyApplications
         }
 
     default:

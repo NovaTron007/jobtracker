@@ -115,11 +115,11 @@ export const showStats = async (req, res) => {
         declined: stats.declined || 0
     }
     // monthly applications
-    let monthyApplications = []
+    let monthlyApplications = []
 
     res.status(StatusCodes.OK).json({
         success: true, 
         defaultStats,
-        monthyApplications
+        monthlyApplications
     })
 }

@@ -19,9 +19,11 @@ export const CREATE_JOB_ERROR="CREATE_JOB_ERROR"
 export const SET_EDIT_JOB="SET_EDIT_JOB"
 export const DELETE_JOB="DELETE_JOB"
 export const DELETE_JOB_SUCCESS="DELETE_JOB_SUCCESS"
-// form change
 export const GET_JOBS="GET_JOBS"
 export const GET_JOBS_SUCCESS="GET_JOBS_SUCCESS"
+// stats
+export const GET_STATS="GET_STATS"
+export const GET_STATS_SUCCESS="GET_STATS_SUCCESS"
 // form change
 export const HANDLE_CHANGE="HANDLE_CHANGE"
 export const CLEAR_FORM_VALUES="CLEAR_FORM_VALUES"

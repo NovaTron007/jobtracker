@@ -6,7 +6,7 @@ import { FaLocationArrow, FaBriefcase, FaCalendarAlt } from "react-icons/fa"
 import { useAppContext } from "../Context/AppContext" // global state
 import JobInfo from "./JobInfo"
 
-function Job({_id, company, position, jobLocation, status, jobType, createdAt}) { // destructure props
+const Job = ({_id, company, position, jobLocation, status, jobType, createdAt}) => { // destructure props
 	// format date using moment
 	const date = moment(createdAt).format("MMM Do YY")
 	// get state functions

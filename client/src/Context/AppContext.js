@@ -8,7 +8,7 @@ import {
     CREATE_JOB, CREATE_JOB_SUCCESS, CREATE_JOB_ERROR,
     GET_JOBS, GET_JOBS_SUCCESS,
     HANDLE_CHANGE, CLEAR_FORM_VALUES, SET_EDIT_JOB,
-    DELETE_JOB, DELETE_JOB_SUCCESS
+    DELETE_JOB, DELETE_JOB_SUCCESS, GET_STATS, GET_STATS_SUCCESS
 } from "./actions"
 
 
@@ -57,7 +57,10 @@ const initialState = {
     jobs: [],
     totalJobs: 0,
     totalPages: 1,
-    page: 1
+    page: 1,
+    // stats
+    stats: {},
+    monthlyApplications: []
 }
 
 // create context
@@ -317,6 +320,26 @@ const AppProvider = ({children}) => {
         }
     }
 
+    // get stats
+    const getStats = async () => {
+        // init 
+        dispatch({type: GET_STATS})
+        // get response
+        try {
+            const { data } = await authFetch("/jobs/stats") // api url to get stats (axios default is get so can omit)
+            dispatch({
+                type: GET_STATS_SUCCESS,
+                payload: { stats: data.defaultStats, monthlyApplications: data.monthlyApplications }
+            })
+        } catch (err) {
+            console.log("err getting stats: ", err)
+            // logoutUser()
+        }
+        // clear alerts
+        clearAlert()
+    }
+
+
     // get jobs on render
     useEffect(() => {
         getJobs()
@@ -330,7 +353,8 @@ const AppProvider = ({children}) => {
             displayAlert, clearAlert, toggleSidebar, 
             authUser, logoutUser, updateUser,
             handleChangeGlobal, clearFormValues,
-            createJob, getJobs, setEditJob, editJob, deleteJob
+            createJob, getJobs, setEditJob, editJob, deleteJob,
+            getStats
         }}>{children}</AppContext.Provider>
     )
 }
