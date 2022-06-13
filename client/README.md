@@ -7,3 +7,4 @@
 - npm install axios
 - npm install react-icons
 - npm install moment
+- npm install recharts
