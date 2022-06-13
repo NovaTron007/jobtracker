@@ -12,6 +12,7 @@
 - npm install jsonwebtoken
 - npm install concurrently --save-dev (rem to npm install in client when pulled)
 - npm install cors
+- npm install moment
 
 # frontend setup (check readme in client)
 - npm install if pulled

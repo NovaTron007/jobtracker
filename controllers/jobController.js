@@ -3,6 +3,7 @@ import { StatusCodes } from "http-status-codes"
 import { CustomErrorMessage } from "../errors/index.js"
 import checkPermission from "../utils/checkPermission.js"
 import mongoose from "mongoose"
+import moment from "moment" // format date
 
 
 export const createJob = async (req, res) => {
@@ -92,11 +93,13 @@ export const deleteJob = async (req, res) => {
 export const showStats = async (req, res) => {
     // returns array with objects in response
     let stats = await Job.aggregate([
+        // match: mongodb operator (get all jobs by user)
         { 
-            $match: { createdBy: mongoose.Types.ObjectId(req.user.userId) } 
+            $match: { createdBy: mongoose.Types.ObjectId(req.user.userId) }
         },
+        // group by object: mongodb operator
         { 
-            $group: { _id: `$status`, count: {$sum: 1 } } // result: { "stats": [{ "_id": "interview", "count": 9 }, ..etc } rename id as status
+            $group: { _id: "$status", count: {$sum: 1 } } // result: { "stats": [{ "_id": "interview", "count": 9 }, ..etc } rename id as status
         }
     ])
     // reduce stats into single object
@@ -115,8 +118,37 @@ export const showStats = async (req, res) => {
         declined: stats.declined || 0
     }
     // monthly applications
-    let monthlyApplications = []
+    let monthlyApplications = await Job.aggregate([
+        // match: mongodb operator (get all jobs by user)
+        {
+            $match: { createdBy: mongoose.Types.ObjectId(req.user.userId) } // get jobs by user
+        },
+        // group by object: mongodb operator
+        {
+           $group: { 
+               _id: { year: { $year: "$createdAt" }, month: { $month: "$createdAt"} }, // _id is the expression to use
+               count: { $sum: 1 } // sum of jobs with same year & month
+            }
+        },
+        // sort: mongodb operator (use the id's above: year and month objects)
+        {
+            $sort: {
+                "_id.year": -1, "_id.month": -1 // -1 descending (get latest entries in db)
+            }
+        },
+        {
+            $limit: 6 // show last 6 records
+        }
+    ])
+    
+    // destructure and format date from _id object
+    monthlyApplications = monthlyApplications.map((item) => {
+        const { _id: {year, month}, count} = item // id is nested object destructure again
+        const date = moment().month(month-1).year(year-1).format("MMM Y") // mongodb months 1-12, moment months 0-11 (subtract 1 from mongo)
+        return {date, count} // return date and count as object
+    }).reverse() // oldest first for chart
 
+    // response
     res.status(StatusCodes.OK).json({
         success: true, 
         defaultStats,
