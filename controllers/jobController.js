@@ -26,8 +26,51 @@ export const createJob = async (req, res) => {
 }
 
 export const getAllJobs = async (req, res) => {
-    // find job by user
-    const jobs = await Job.find({createdBy: req.user.userId})
+    // Search Query: in url ie: /jobs?status=declined&jobType=full-time&search=media)
+    const { status, jobType, sort, search } = req.query
+    
+    // create and build up query obj
+    const queryObj = { 
+        createdBy: req.user.userId,
+    }
+    
+    // Status: add to queryObj only if status in query params in url (avoid /jobs route error)
+    if(status && status !== "all"){ 
+        queryObj.status = status
+    }
+
+    // jobType: add to queryObj if jobType in query params in url (avoid /jobs route error)
+    if(jobType && jobType !== "all") {
+        queryObj.jobType = jobType
+    }
+
+    // Search term: add to queryObj
+    if(search){
+        // mongodb regex: where text exists in general (not exact match)
+        queryObj.position = {$regex: search, $options: "i"} // term, case insensitive
+    }
+
+    // no await as it will get result immediately, (we want just query)
+    let result = Job.find(queryObj)
+
+    // sort options after result is retrieved
+    if(sort === "latest"){
+        result = result.sort("-createdAt")
+    }
+    if(sort === "oldest"){
+        result = result.sort("createdAt")
+    }
+    if(sort === "a-z"){
+        result = result.sort("position")
+    }
+    if(sort === "z-a"){
+        result = result.sort("-position")
+    }
+        
+    // chain sort conditions
+    const jobs = await result
+
+    // const jobs = await Job.find({createdBy: req.user.userId}) 
     if(!jobs) {
         throw new CustomErrorMessage("No jobs found with that user.", StatusCodes.BAD_REQUEST)
     }
