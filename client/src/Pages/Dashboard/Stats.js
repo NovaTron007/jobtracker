@@ -20,7 +20,7 @@ const Stats = () => {
   // stats
   return (
     <>
-      <h4>Stats</h4>
+      <h3>Stats</h3>
       <StatsContainer />
       { monthlyApplications.length > 0 && <ChartsContainer /> }      
     </>

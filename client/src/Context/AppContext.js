@@ -8,7 +8,8 @@ import {
     CREATE_JOB, CREATE_JOB_SUCCESS, CREATE_JOB_ERROR,
     GET_JOBS, GET_JOBS_SUCCESS,
     HANDLE_CHANGE, CLEAR_FORM_VALUES, SET_EDIT_JOB,
-    DELETE_JOB, DELETE_JOB_SUCCESS, GET_STATS, GET_STATS_SUCCESS
+    DELETE_JOB, DELETE_JOB_SUCCESS, GET_STATS, GET_STATS_SUCCESS,
+    CLEAR_FILTERS
 } from "./actions"
 
 
@@ -60,7 +61,13 @@ const initialState = {
     page: 1,
     // stats
     stats: {},
-    monthlyApplications: []
+    monthlyApplications: [],
+    // search 
+    searchJob: "",
+    searchJobStatus: "all",
+    searchJobType: "all",
+    searchJobSortBy: "latest",
+    searchJobSortByOptions: ["latest", "oldest", "a-z", "z-a"]
 }
 
 // create context
@@ -208,8 +215,9 @@ const AppProvider = ({children}) => {
         clearAlert()
     }
 
-    // input change
+    // form input change and add to state
     const handleChangeGlobal = ({name, value}) => {
+        console.log("name, value: ", name, value)
         // add job
         dispatch({
             type: HANDLE_CHANGE,
@@ -339,6 +347,15 @@ const AppProvider = ({children}) => {
         clearAlert()
     }
 
+    // clear filters
+    const clearFilters = () => {
+        console.log("clearFilters")
+        //dispatch 
+        dispatch({
+            type: CLEAR_FILTERS
+        })
+    }
+
 
     // get jobs on render
     useEffect(() => {
@@ -354,7 +371,8 @@ const AppProvider = ({children}) => {
             authUser, logoutUser, updateUser,
             handleChangeGlobal, clearFormValues,
             createJob, getJobs, setEditJob, editJob, deleteJob,
-            getStats
+            getStats, 
+            clearFilters
         }}>{children}</AppContext.Provider>
     )
 }

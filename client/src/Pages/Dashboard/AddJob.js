@@ -15,7 +15,7 @@ const AddJob = () => {
   const handleChange = (e) => {
     const name = e.target.name
     const value = e.target.value
-    // context function
+    // context function: pass an object to handleChangeGlobal to update state
     handleChangeGlobal({name, value})
   }
 

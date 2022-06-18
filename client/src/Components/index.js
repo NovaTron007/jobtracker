@@ -1,6 +1,7 @@
 // group components into index.js
 import Alert from "./Alert"
 import FormRow from "./FormRow"
+import FormRowSelect from "./FormRowSelect"
 import Logo from "./Logo"
 import Loading from "./Loading"
 import Navbar from "./Navbar"
@@ -12,4 +13,4 @@ import StatsContainer from "./StatsContainer"
 import ChartsContainer from "./ChartsContainer"
 
 
-export { Alert, FormRow, Logo, Loading, Navbar, SmallSidebar, BigSidebar, SearchContainer, JobContainer, StatsContainer, ChartsContainer }
+export { Alert, FormRow, FormRowSelect, Logo, Loading, Navbar, SmallSidebar, BigSidebar, SearchContainer, JobContainer, StatsContainer, ChartsContainer }
