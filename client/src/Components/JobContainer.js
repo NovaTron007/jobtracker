@@ -6,12 +6,14 @@ import { useAppContext } from '../Context/AppContext'
 
 const JobContainer = () => {
     // get state 
-    const { getJobs, jobs, totalJobs, isLoading, page, totalPages } = useAppContext()
+    const { getJobs, jobs, totalJobs, isLoading, page, totalPages, 
+            searchJob, searchJobStatus, searchJobType, searchJobSortBy, searchJobSortByOptions } = useAppContext()
 
     // get jobs on mount
     useEffect(() => {
         getJobs()
-    }, [])
+        // re-render if search form filters are updated
+    }, [searchJob, searchJobStatus, searchJobType, searchJobSortBy, searchJobSortByOptions])
 
 
     if(isLoading) {

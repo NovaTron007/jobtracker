@@ -269,12 +269,20 @@ const AppProvider = ({children}) => {
 
     // get jobs
     const getJobs = async() => {
+        // get search state values
+        const { searchJob, searchJobSortBy, searchJobStatus, searchJobType } = state
+        // create api call with search state values
+        let url = `/jobs/?status=${searchJobStatus}&jobType=${searchJobType}&sort=${searchJobSortBy}`
+        // check if search input has search value
+        if(searchJob) {
+            url = url + `&search=${searchJob}`
+        }
         // init
         dispatch({type: GET_JOBS})
         
         // get response
         try {
-            const { data } = await authFetch.get("/jobs/")
+            const { data } = await authFetch.get(url) // pass updated url
             // destructure
             const { jobs, totalJobs, totalPages } = data
             // send to store
