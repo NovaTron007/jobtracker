@@ -66,6 +66,14 @@ export const getAllJobs = async (req, res) => {
     if(sort === "z-a"){
         result = result.sort("-position")
     }
+
+    // pagination
+    const page = Number(req.query.page) || 1 // get page param from url
+    const limit = Number(req.query.limit) || 10 // total items to show
+    const skip = (page - 1) * limit //  how many items to skip over ie (2 - 1) * 10 = skip 10 items for page 2
+    
+    // add to result 
+    result = result.skip(skip).limit(limit)
         
     // chain sort conditions
     const jobs = await result
