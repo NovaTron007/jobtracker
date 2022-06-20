@@ -80,7 +80,7 @@ export const getAllJobs = async (req, res) => {
 
     // get total jobs: count documents instead of limit
     const totalJobs = await Job.countDocuments(queryObj)
-    const numOfPages = Math.ceil(totalJobs / limit) // ie: 30jobs / 10 per page = 3 pages
+    const totalPages = Math.ceil(totalJobs / limit) // ie: 30jobs / 10 per page = 3 pages
 
     // const jobs = await Job.find({createdBy: req.user.userId}) 
     if(!jobs) {
@@ -90,7 +90,7 @@ export const getAllJobs = async (req, res) => {
     res.status(StatusCodes.OK).json({
         success: true, 
         totalJobs,
-        numOfPages,
+        totalPages,
         jobs
     })
 }

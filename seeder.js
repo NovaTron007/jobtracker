@@ -3,7 +3,6 @@ import dotenv from "dotenv" // use dotenv variables
 dotenv.config({path: "./config/config.env"}) // load .env before other files that use them
 import connectDB from "./config/dbConnect.js" // connect db
 import Job from "./models/Job.js" // Job model
-import User from "./models/User.js" // User model
 
 // to run: node seeder
 const start = async () => {
@@ -12,8 +11,6 @@ const start = async () => {
         await connectDB()
         // delete all jobs
         await Job.deleteMany()
-        // delete all users
-        await User.deleteMany()
         // file to use, meta url syntax to use for upload json (mock data createdBy: add user id in file )
         const jsonProducts = JSON.parse(await readFile(new URL("./mock_data.json", import.meta.url)))
         // add json file using create

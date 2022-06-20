@@ -3,6 +3,7 @@ import Loading from "./Loading"
 import Job  from "./Job"
 import Wrapper from "../assets/Wrappers/JobsContainer"
 import { useAppContext } from '../Context/AppContext'
+import PageBtnContainer from './PageBtnContainer'
 
 const JobContainer = () => {
     // get state 
@@ -13,7 +14,7 @@ const JobContainer = () => {
     useEffect(() => {
         getJobs()
         // re-render if search form filters are updated
-    }, [searchJob, searchJobStatus, searchJobType, searchJobSortBy, searchJobSortByOptions])
+    }, [page, totalPages, searchJob, searchJobStatus, searchJobType, searchJobSortBy, searchJobSortByOptions])
 
 
     if(isLoading) {
@@ -35,6 +36,7 @@ const JobContainer = () => {
                     )
                 })}
             </div>
+            { totalPages > 1 && <PageBtnContainer />}
 
         </Wrapper>
     )

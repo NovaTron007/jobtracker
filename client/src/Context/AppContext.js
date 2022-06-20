@@ -9,7 +9,7 @@ import {
     GET_JOBS, GET_JOBS_SUCCESS,
     HANDLE_CHANGE, CLEAR_FORM_VALUES, SET_EDIT_JOB,
     DELETE_JOB, DELETE_JOB_SUCCESS, GET_STATS, GET_STATS_SUCCESS,
-    CLEAR_FILTERS
+    CLEAR_FILTERS, CHANGE_PAGE
 } from "./actions"
 
 
@@ -364,6 +364,15 @@ const AppProvider = ({children}) => {
         })
     }
 
+    // paginate: receive newPage
+    const changePage = (newPage) => {
+        // dispatch action
+        dispatch({
+            type: CHANGE_PAGE,
+            payload: { newPage }
+        })
+    }
+
 
     // get jobs on render
     useEffect(() => {
@@ -380,7 +389,8 @@ const AppProvider = ({children}) => {
             handleChangeGlobal, clearFormValues,
             createJob, getJobs, setEditJob, editJob, deleteJob,
             getStats, 
-            clearFilters
+            clearFilters,
+            changePage
         }}>{children}</AppContext.Provider>
     )
 }

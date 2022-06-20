@@ -4,7 +4,7 @@ import { DISPLAY_ALERT, CLEAR_ALERT,
     HANDLE_CHANGE, CLEAR_FORM_VALUES,
     CREATE_JOB, CREATE_JOB_SUCCESS, CREATE_JOB_ERROR, GET_JOBS, GET_JOBS_SUCCESS,
     SET_EDIT_JOB, DELETE_JOB, DELETE_JOB_SUCCESS, GET_STATS, GET_STATS_SUCCESS,
-    CLEAR_FILTERS
+    CLEAR_FILTERS, CHANGE_PAGE
 } from "./actions"
 
 // create reducer: initialState passed from AppContext ie: const [state, dispatch] = useReducer(reducer, initialState)
@@ -97,6 +97,7 @@ switch(action.type) {
     case HANDLE_CHANGE: 
         return {
             ...state,
+            page: 1, // reset to page 1 after search
             [action.payload.name]: action.payload.value // update state value by key name
         }
     case CLEAR_FORM_VALUES: 
@@ -213,6 +214,12 @@ switch(action.type) {
             searchJobStatus: "all",
             searchJobType: "all",
             searchJobSortBy: "latest"
+        }
+    // change page
+    case CHANGE_PAGE: 
+        return {
+            ...state, 
+            page: action.payload.newPage
         }
 
     default:
