@@ -78,6 +78,10 @@ export const getAllJobs = async (req, res) => {
     // chain sort conditions
     const jobs = await result
 
+    // get total jobs: count documents instead of limit
+    const totalJobs = await Job.countDocuments(queryObj)
+    const numOfPages = Math.ceil(totalJobs / limit) // ie: 30jobs / 10 per page = 3 pages
+
     // const jobs = await Job.find({createdBy: req.user.userId}) 
     if(!jobs) {
         throw new CustomErrorMessage("No jobs found with that user.", StatusCodes.BAD_REQUEST)
@@ -85,9 +89,9 @@ export const getAllJobs = async (req, res) => {
     // response 
     res.status(StatusCodes.OK).json({
         success: true, 
-        jobs,
-        totalJobs: jobs.length,
-        totalPages: 1
+        totalJobs,
+        numOfPages,
+        jobs
     })
 }
 
