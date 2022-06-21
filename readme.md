@@ -21,3 +21,6 @@
 # create .gitignore
 - /node_modules
 - /config/.env
+
+# build
+- In scripts "build-client": "cd client && npm run build"

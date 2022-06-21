@@ -291,8 +291,7 @@ const AppProvider = ({children}) => {
                 payload: { jobs, totalJobs, totalPages }
             })
         } catch(err) {
-            console.log("err: ", err)
-            // logoutUser()
+            logoutUser()
         }
         
         // clear alerts if any
@@ -331,8 +330,7 @@ const AppProvider = ({children}) => {
             // refresh jobs
             getJobs()
         } catch (err) {
-            console.log(err)
-            // logoutUser()
+            logoutUser()
         }
     }
 
@@ -348,8 +346,7 @@ const AppProvider = ({children}) => {
                 payload: { stats: data.defaultStats, monthlyApplications: data.monthlyApplications }
             })
         } catch (err) {
-            console.log("err getting stats: ", err)
-            // logoutUser()
+            logoutUser()
         }
         // clear alerts
         clearAlert()

@@ -16,8 +16,8 @@ const authenticateUser = async (req, res, next) => {
         const decodedToken = jsonwebtoken.verify(token, process.env.JWT_SECRET) // userid, issue at, exp
         // add to req object: set req.user to new object with id sent in token (req object sent in url)
         req.user = { userId: decodedToken.id }
-        console.log("authenticateUser req.user: ",req.user)
-        next() // next middleware (controller in this case)
+        // next middleware (controller in this case)
+        next() 
     } catch(err) {
         throw new CustomErrorMessage("Authentication Invalid!")
     }
