@@ -1,3 +1,6 @@
+# run app
+- npm start
+
 # backend setup
 - cd root then npm init
 - node seeder to import mock data
