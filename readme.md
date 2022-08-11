@@ -9,6 +9,7 @@
 - npm install dotenv
 - npm install mongoose
 - npm install validator
+- npm install morgan
 - npm install express-async-errors
 - npm install http-status-codes
 - npm install bcryptjs
