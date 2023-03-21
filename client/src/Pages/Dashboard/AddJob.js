@@ -5,11 +5,12 @@ import Alert from "../../Components/Alert"
 import FormRow from "../../Components/FormRow"
 import FormRowSelect from '../../Components/FormRowSelect'
 
+// layout for add job/edit job
 const AddJob = () => {
   // get state
-  const { displayAlert, showAlert, isEditing, position, 
+  const { displayAlert, showAlert, isEditing, editJobId, position, 
         company, jobLocation, jobTypeOptions, jobType, statusOptions, status, 
-        handleChangeGlobal, clearFormValues, createJob, editJob } = useAppContext()
+        handleChangeGlobal, clearFormValues, createJob, updateJob } = useAppContext()
 
   // local handleChange: update state in context
   const handleChange = (e) => {
@@ -29,7 +30,7 @@ const AddJob = () => {
     }
     // context function: edit job on submit
     if(isEditing) {
-      editJob()
+      updateJob(editJobId)
       return
     }
     // context functions: create job on submit

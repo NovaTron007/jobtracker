@@ -1,9 +1,13 @@
+// set & update global state here
+
 import { DISPLAY_ALERT, CLEAR_ALERT, 
     AUTH_USER, AUTH_USER_SUCCESS, AUTH_USER_ERROR, TOGGLE_SIDEBAR, 
     LOGOUT_USER, UPDATE_USER, UPDATE_USER_SUCCESS, UPDATE_USER_ERROR,
     HANDLE_CHANGE, CLEAR_FORM_VALUES,
     CREATE_JOB, CREATE_JOB_SUCCESS, CREATE_JOB_ERROR, GET_JOBS, GET_JOBS_SUCCESS,
-    SET_EDIT_JOB, DELETE_JOB, DELETE_JOB_SUCCESS, GET_STATS, GET_STATS_SUCCESS,
+    SET_EDIT_JOB, UPDATE_JOB, UPDATE_JOB_SUCCESS, UPDATE_JOB_ERROR, 
+    DELETE_JOB, DELETE_JOB_SUCCESS, DELETE_JOB_ERROR, 
+    GET_STATS, GET_STATS_SUCCESS,
     CLEAR_FILTERS, CHANGE_PAGE
 } from "./actions"
 
@@ -31,8 +35,7 @@ switch(action.type) {
     // AUTH REDUCERS
     case AUTH_USER:
         return {
-            ...state, 
-            isLoading: false
+            ...state,
         }
     case AUTH_USER_SUCCESS:
         return {
@@ -43,6 +46,7 @@ switch(action.type) {
             jobLocation: action.payload.location,
             showAlert: true,
             alertType: "success",
+            isLoading: false,
             alertMessage: action.payload.alertMessage
         }
     case AUTH_USER_ERROR: 
@@ -150,7 +154,7 @@ switch(action.type) {
                 isLoading: false, 
                 showAlert: true,
                 alertType: "danger",
-                alertMessage: action.payload.message // get error message from api set in payload
+                alertMessage: action.payload.alertMessage // get error message from api set in payload
             }
     case GET_JOBS: 
         return {
@@ -181,6 +185,26 @@ switch(action.type) {
             jobType, 
             jobLocation
         }
+    case UPDATE_JOB:
+        return {
+            ...state, 
+            isLoading: true
+        }
+    case UPDATE_JOB_SUCCESS:
+        return {
+            ...state,
+            isLoading: false,
+            alertMessage: action.payload.alertMessage
+        }
+    case UPDATE_JOB_ERROR: {
+        return {
+            ...state,
+            isLoading: false,
+            showAlert: true,
+            alertType: "danger",
+            alertMessage: action.payload.alertMessage
+        }
+    }
     case DELETE_JOB: 
         return {
             ...state, 
@@ -192,6 +216,14 @@ switch(action.type) {
             isLoading: false,
             alertType: "success",
             alertMessage: "Job Created!"
+        }
+    case DELETE_JOB_ERROR:
+        return {
+            ...state, 
+            isLoading: false,
+            showAlert: true,
+            alertType: "danger",
+            alertMessage: action.payload.alertMessage // get alertMessage from payload obj
         }
     // stats
     case GET_STATS: 

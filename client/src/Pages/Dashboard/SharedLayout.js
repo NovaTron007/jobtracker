@@ -1,7 +1,7 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
 import Wrapper from "../../assets/Wrappers/SharedLayout"
-import { Navbar, SmallSidebar, BigSidebar } from "../../Components/"
+import { Navbar, SmallSidebar, BigSidebar, Footer } from "../../Components/"
 
 const SharedLayout = () => {
   return (
@@ -14,6 +14,7 @@ const SharedLayout = () => {
                 <div className="dashboard-page">
                     <Outlet />{/* show routes nested inside SharedLayout's Route path */}
                 </div>
+                <Footer />
               </div>
           </main>
       </Wrapper>

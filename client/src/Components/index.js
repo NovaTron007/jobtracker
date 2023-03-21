@@ -11,6 +11,7 @@ import JobContainer from "./JobContainer"
 import SearchContainer from "./SearchContainer"
 import StatsContainer from "./StatsContainer"
 import ChartsContainer from "./ChartsContainer"
+import Footer from "./Footer"
 
 
-export { Alert, FormRow, FormRowSelect, Logo, Loading, Navbar, SmallSidebar, BigSidebar, SearchContainer, JobContainer, StatsContainer, ChartsContainer }
+export { Alert, FormRow, FormRowSelect, Logo, Loading, Navbar, SmallSidebar, BigSidebar, SearchContainer, JobContainer, StatsContainer, ChartsContainer, Footer }

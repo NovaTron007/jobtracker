@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from "react-router-dom"
 import Wrapper from "../assets/Wrappers/RegisterPage"
-import { Alert, FormRow, Logo } from '../Components' // loaded in index.js
+import { Alert, Footer, FormRow, Logo } from '../Components' // loaded in index.js
 import { useAppContext } from '../Context/AppContext'
 
 // initial state object
@@ -47,7 +47,7 @@ const Register = () => {
 			displayAlert()
 			return
 		}
-		// submit 
+		// submit, login or create user
 		if(isMember)  {
 			// login pass object with details
 			authUser({currentUser, endpoint: "login", alertMessage: "Login successful!"})
@@ -107,7 +107,15 @@ const Register = () => {
 				value={formValues.password}  
 				handleChange={handleChange} 
 			/>
-			<button type="submit" className="btn btn-block">Submit</button>
+			<button type="submit" className="btn btn-block" >Submit</button>
+			{/* auto login with test user credentials */}
+			<button type="button" className="btn btn-block btn-hipster" onClick={async () => {
+				await authUser({
+					currentUser: {name: "test", email:"test@test.com", password:"pass1234"}, endpoint: "login", 
+					alertMessage: "Login successful! Redirecting..."
+				})
+			}}>Demo App</button>
+
 			<p>
 				{formValues.isMember ? "Not yet a member?" : "Already a member?"}
 				<button 
@@ -117,6 +125,7 @@ const Register = () => {
 				</button>
 			</p>
 		</form>
+		<Footer />
       </Wrapper>
   )
 }

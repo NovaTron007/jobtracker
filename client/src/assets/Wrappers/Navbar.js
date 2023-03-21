@@ -79,6 +79,9 @@ const Wrapper = styled.nav`
     .logo-text {
       display: block;
     }
+    .logoPng {
+      display: none;
+    }
   }
 `
 export default Wrapper
