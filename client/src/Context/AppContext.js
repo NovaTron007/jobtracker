@@ -7,8 +7,10 @@ import {
     UPDATE_USER, UPDATE_USER_SUCCESS, UPDATE_USER_ERROR,
     CREATE_JOB, CREATE_JOB_SUCCESS, CREATE_JOB_ERROR,
     GET_JOBS, GET_JOBS_SUCCESS,
-    HANDLE_CHANGE, CLEAR_FORM_VALUES, SET_EDIT_JOB,
-    DELETE_JOB, DELETE_JOB_SUCCESS, GET_STATS, GET_STATS_SUCCESS,
+    HANDLE_CHANGE, CLEAR_FORM_VALUES,
+    SET_EDIT_JOB, UPDATE_JOB, UPDATE_JOB_SUCCESS, UPDATE_JOB_ERROR,
+    DELETE_JOB, DELETE_JOB_SUCCESS, DELETE_JOB_ERROR,
+    GET_STATS, GET_STATS_SUCCESS,
     CLEAR_FILTERS, CHANGE_PAGE
 } from "./actions"
 
@@ -135,6 +137,7 @@ const AppProvider = ({children}) => {
 
     // register user: submit data to api, destructure object
     const authUser = async ({currentUser, endpoint, alertMessage}) => {
+        console.log("endpoint:", endpoint)
         // dispatch action w/payload and set global state
         dispatch({type: AUTH_USER})
         console.log("authUser: ", currentUser)
@@ -308,8 +311,33 @@ const AppProvider = ({children}) => {
     }
 
     // edit job
-    const editJob = () => {
+    const updateJob = async (id) => {
         console.log("edit job")
+        // begin update job
+        dispatch({
+            type: UPDATE_JOB
+        })
+
+        try {
+            // call api, send in job id 
+            await authFetch.patch(`/jobs/${id}`)
+            // dispatch action
+            dispatch({
+                type: UPDATE_JOB_SUCCESS, 
+                payload: {
+                    alertMessage: "Job updated!"
+                }
+            })
+        } catch(err) {
+            dispatch({
+                type: UPDATE_JOB_ERROR, 
+                payload: { 
+                    alertMessage: err.response.data.message 
+                }
+            })
+            // clear alert
+            clearAlert()
+        }
     }
 
     // delete job
@@ -330,7 +358,14 @@ const AppProvider = ({children}) => {
             // refresh jobs
             getJobs()
         } catch (err) {
-            logoutUser()
+            dispatch({
+                type: DELETE_JOB_ERROR,
+                payload: {alertMessage:err.response.data.message }
+            })
+            // clear alert
+            clearAlert()
+            // logout
+            // logoutUser()
         }
     }
 
@@ -384,7 +419,7 @@ const AppProvider = ({children}) => {
             displayAlert, clearAlert, toggleSidebar, 
             authUser, logoutUser, updateUser,
             handleChangeGlobal, clearFormValues,
-            createJob, getJobs, setEditJob, editJob, deleteJob,
+            createJob, getJobs, setEditJob, updateJob, deleteJob,
             getStats, 
             clearFilters,
             changePage

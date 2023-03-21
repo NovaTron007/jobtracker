@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom"
 import main from "../assets/images/main.svg"
 import Wrapper from "../assets/Wrappers/Testing" // import styled component (name how we like)
+import { Footer } from "../Components"
 import Logo from "../Components/Logo"
 
 const Landing = () => {
@@ -21,6 +22,8 @@ const Landing = () => {
             </div>
             <img src={main} alt="jobtracker" className="img main-img" />
         </div>
+        <Footer />
+
     </Wrapper>
 
   )
