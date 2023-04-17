@@ -6,7 +6,7 @@ import { useAppContext } from '../Context/AppContext'
 
 const BigSidebar = () => {
   // get global state, and functions
-  const { toggleSidebar, showSidebar } = useAppContext()
+  const { showSidebar } = useAppContext()
 
   return (
     <Wrapper>

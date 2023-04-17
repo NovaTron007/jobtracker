@@ -9,6 +9,7 @@ const Stats = () => {
 
   // get stats on render
   useEffect(() => {
+    console.log("useEffect get stats")
     getStats()
   }, [])
   

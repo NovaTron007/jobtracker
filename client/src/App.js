@@ -19,6 +19,7 @@ function App() {
           <Route path="add-job" element={<AddJob/> }/>
           <Route path="profile" element={<Profile/>} />
         </Route>
+        {/* end nested routes */}
         {/* other pages */}
         <Route path="/landing" element={<Landing />} />
         <Route path="/register" element={<Register />} />

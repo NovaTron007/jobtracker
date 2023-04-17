@@ -28,6 +28,8 @@ export const createJob = async (req, res) => {
 export const getAllJobs = async (req, res) => {
     // Search Query: in url ie: /jobs?status=declined&jobType=full-time&search=media)
     const { status, jobType, sort, search } = req.query
+
+    console.log("getAllJobs: ", req.user)
     
     // create and build up query obj
     const queryObj = { 
@@ -98,6 +100,8 @@ export const getAllJobs = async (req, res) => {
 export const updateJob = async (req, res) => {
     // get params
     const { id } = req.params // req.params.id
+    console.log("job id: ", id)
+    console.log("job req.body: ", req.body)
     // get body
     const { company, position } = req.body
     // blank fields
@@ -146,6 +150,7 @@ export const deleteJob = async (req, res) => {
 
 // show stats: aggregate pipeline, get jobs by user createdBy, group and count each status values
 export const showStats = async (req, res) => {
+    console.log("showStats req.user: ", req.user)
     // returns array with objects in response
     let stats = await Job.aggregate([
         // match: mongodb operator (get all jobs by user)
