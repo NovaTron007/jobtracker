@@ -3,9 +3,10 @@ import dotenv from "dotenv" // read env vars
 import "express-async-errors" // try/catch removed
 import cors from "cors" // enable req to to other servers
 import morgan from "morgan" // log HTTP requests and errors, and simplifies the process. 
+import cookieParser from "cookie-parser"
 import notFoundMiddleware from "./middleware/notFoundMiddleware.js"
 import errorHandlerMiddleware from "./middleware/errorHandlerMiddleware.js"
-import authenticateUser from "./middleware/auth.js" // auth middleware
+import authenticateUser from "./middleware/authMiddleware.js" // auth middleware
 import connectDB from "./config/dbConnect.js" // connect to mongodb
 
 // use express
@@ -23,7 +24,10 @@ app.use(express.json())
 // allow cross origin requests
 app.use(cors())
 
-// Routes: prefix then use route file for endpoint
+// can read cookies from request sent in by client
+app.use(cookieParser())
+
+// Routes: add prefixes to route files then use route file for endpoint
 app.use("/api/v1/auth", authRouter)
 app.use("/api/v1/jobs", authenticateUser, jobsRouter)
 

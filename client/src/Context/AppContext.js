@@ -11,30 +11,13 @@ import {
     SET_EDIT_JOB, UPDATE_JOB, UPDATE_JOB_SUCCESS, UPDATE_JOB_ERROR,
     DELETE_JOB, DELETE_JOB_SUCCESS, DELETE_JOB_ERROR,
     GET_STATS, GET_STATS_SUCCESS,
-    CLEAR_FILTERS, CHANGE_PAGE
+    CLEAR_FILTERS, CHANGE_PAGE, GET_USER, GET_USER_SUCCESS
 } from "./actions"
-
-
-
-// localStorage: check any storage before init
-const user = localStorage.getItem("user")
-const token = localStorage.getItem("token")
-const userLocation = localStorage.getItem("location")
-
-// localStorage: add user by passing object, initialise global state                                         
-const addUserToLocalStorage = ({user, token, location}) => {
-    localStorage.setItem("user", JSON.stringify(user))
-    localStorage.setItem("token", token)
-    localStorage.setItem("location", location)
-}
-const removeUserFromLocalStorage = () => {
-    localStorage.removeItem("user")
-    localStorage.removeItem("token")
-    localStorage.removeItem("location")
-}
 
 // global state
 const initialState = {
+    // when refresh page look for user
+    userLoading: true,
     // loading and alerts
     isLoading: false, 
     showAlert: false,
@@ -43,10 +26,9 @@ const initialState = {
     // UI
     showSidebar: false,
     // user
-    user: user ? JSON.parse(user) : null, // parse object from storage
-    token: token ? token : null,
-    userLocation: userLocation || null,
-    jobLocation: userLocation || null,
+    user: null,
+    userLocation: null,
+    jobLocation: null,
     // job state
     isEditing: false,
     editJobId: "",
@@ -86,23 +68,11 @@ const AppProvider = ({children}) => {
     // set state: use dispatch for useReducer (accepts the reducer, initialState)
     const [state, dispatch] = useReducer(reducer, initialState)
 
-    // sending bearer token in every request (we won't use this)
-    // axios.defaults.headers.common["Authorization"] = `Bearer ${state.token}`
-
     // AXIOS
     // axios instance for making requests with options ie sending bearer token
     const authFetch = axios.create({
         baseURL: "/api/v1"
     })
-
-    // request interceptor: send token to server
-    authFetch.interceptors.request.use((config) => {
-        config.headers.common["Authorization"] = `Bearer ${state.token}`
-        return config
-    }, (err) => {
-            return Promise.reject(err)
-        }
-    )
 
     // response interceptor 
     authFetch.interceptors.response.use((response) => {
@@ -140,20 +110,17 @@ const AppProvider = ({children}) => {
         console.log("endpoint:", endpoint)
         // dispatch action w/payload and set global state
         dispatch({type: AUTH_USER})
-        console.log("authUser: ", currentUser)
         // call api and pass user object
         try {
             const response = await axios.post(`/api/v1/auth/${endpoint}`, currentUser)
             console.log("response from api: ", response)
             // response: destructure response from api
-            const { user, token, location } = response.data
+            const { user, location } = response.data
             // dispatch action: w/payload and set global state
             dispatch({
                     type: AUTH_USER_SUCCESS, 
-                    payload: {user, token, location, alertMessage} // payload object
+                    payload: {user, location, alertMessage} // payload object
             })
-            // set localStorage: add object
-            addUserToLocalStorage({user, token, location})
         } 
         // get err response object returned from browser
         catch(err) {
@@ -178,12 +145,15 @@ const AppProvider = ({children}) => {
     }
 
     // logout
-    const logoutUser = () => {
+    const logoutUser = async () => {
+        try {
+            await authFetch.get("/auth/logout")
+        } catch (err) {
+            console.log("logout user error: ", err.response.message)
+        }
         dispatch({
             type: LOGOUT_USER
         })
-        // clear storage
-        removeUserFromLocalStorage()
     }
 
     // update user
@@ -195,14 +165,12 @@ const AppProvider = ({children}) => {
             // destructure response.data from axios response
             const { data } = await authFetch.patch("/auth/updateUser/", currentUser)
             // destructure data
-            const { user, location, token } = data
+            const { user, location } = data
             // dispatch action
             dispatch({
                 type: UPDATE_USER_SUCCESS,
-                payload: { user, location, token } // payload object
+                payload: { user, location } // payload object
             })
-            // update localstorage
-            addUserToLocalStorage({user, location, token})
 
         } catch(err) {
             console.log("err updateUser: ", err.response.data)
@@ -216,6 +184,26 @@ const AppProvider = ({children}) => {
         }
         // clear alert
         clearAlert()
+    }
+
+    // get current user
+    const getCurrentUser = async () => {
+        // dispatch
+        dispatch({ type: GET_USER }) 
+        try {
+            // user back from api
+            const { data } = await authFetch(`/auth/getCurrentUser`)
+            const { user, location } = data
+            dispatch({
+                type: GET_USER_SUCCESS,
+                payload: { user, location }
+            })
+        // unauthorised will return 401
+        } catch(err) {
+            if(err.response.status === 401) return
+            console.log("getCurrentUser context error: ", err.response.data.message)
+            logoutUser()
+        }
     }
 
     // form input change and add to state
@@ -318,26 +306,29 @@ const AppProvider = ({children}) => {
             type: UPDATE_JOB
         })
 
+        // get state
         try {
-            // call api, send in job id 
-            await authFetch.patch(`/jobs/${id}`)
-            // dispatch action
-            dispatch({
-                type: UPDATE_JOB_SUCCESS, 
-                payload: {
-                    alertMessage: "Job updated!"
-                }
+            // get state
+            const { position, company, jobLocation, jobType, status } = state
+            // send data
+            await authFetch.patch(`/jobs/${id}`, {
+                position,
+                company,
+                jobLocation, 
+                jobType, 
+                status
             })
+            // success
+            dispatch({type: UPDATE_JOB_SUCCESS})
         } catch(err) {
             dispatch({
-                type: UPDATE_JOB_ERROR, 
-                payload: { 
-                    alertMessage: err.response.data.message 
-                }
+                type: UPDATE_JOB_ERROR,
+                payload: {alertMessage:err.response.data.message }
+
             })
-            // clear alert
-            clearAlert()
         }
+        // clear alert
+        clearAlert()
     }
 
     // delete job
@@ -371,17 +362,19 @@ const AppProvider = ({children}) => {
 
     // get stats
     const getStats = async () => {
+        console.log("getStats")
         // init 
         dispatch({type: GET_STATS})
         // get response
         try {
             const { data } = await authFetch("/jobs/stats") // api url to get stats (axios default is get so can omit)
+            console.log("data getStats: ", data)
             dispatch({
                 type: GET_STATS_SUCCESS,
                 payload: { stats: data.defaultStats, monthlyApplications: data.monthlyApplications }
             })
         } catch (err) {
-            logoutUser()
+            // logoutUser()
         }
         // clear alerts
         clearAlert()
@@ -405,11 +398,10 @@ const AppProvider = ({children}) => {
         })
     }
 
-
-    // get jobs on render
     useEffect(() => {
-        getJobs()
-    }, [])
+        getCurrentUser()
+      }, [])
+
 
 
     return (
