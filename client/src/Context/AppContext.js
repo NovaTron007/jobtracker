@@ -124,7 +124,18 @@ const AppProvider = ({children}) => {
         } 
         // get err response object returned from browser
         catch(err) {
-            err && console.log("error registering: ", err.response.data)
+            // too many requests
+            if(err.response.status === 429) {
+                console.log("err.response.status: ", err.response.status)
+                dispatch({
+                    type: AUTH_USER_ERROR,
+                    payload: {
+                        alertMessage: "Too many request from this IP!"
+                    }
+                })
+                clearAlert()
+                return; // return out of whole block: stop code running below removing above alertMessage
+            }
             const { message } = err.response.data
             // dispatch action: w/payload and set global state
             dispatch({ 
@@ -320,6 +331,8 @@ const AppProvider = ({children}) => {
             })
             // success
             dispatch({type: UPDATE_JOB_SUCCESS})
+            // clear form values
+            dispatch({ type: CLEAR_FORM_VALUES })
         } catch(err) {
             dispatch({
                 type: UPDATE_JOB_ERROR,

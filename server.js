@@ -8,6 +8,13 @@ import notFoundMiddleware from "./middleware/notFoundMiddleware.js"
 import errorHandlerMiddleware from "./middleware/errorHandlerMiddleware.js"
 import authenticateUser from "./middleware/authMiddleware.js" // auth middleware
 import connectDB from "./config/dbConnect.js" // connect to mongodb
+// security middlewares
+import helmet from "helmet"; // remove, set headers to comply w/web security stds i.e x-powered
+import xss from "xss-clean" // sanitize user input against xss
+import mongoSanitize from "express-mongo-sanitize" // prevent mongoDB operator injection
+
+
+
 
 // use express
 const app = express()
@@ -21,6 +28,11 @@ import jobsRouter from "./routes/jobRoutes.js"
 // Parse json data sent from body
 app.use(express.json())
 
+// security middleware
+app.use(helmet())
+app.use(xss())
+app.use(mongoSanitize())
+
 // allow cross origin requests
 app.use(cors())
 
@@ -31,7 +43,7 @@ app.use(cookieParser())
 app.use("/api/v1/auth", authRouter)
 app.use("/api/v1/jobs", authenticateUser, jobsRouter)
 
-// Middleware
+// Custom Middleware
 app.use(notFoundMiddleware) // run if no route exists
 app.use(errorHandlerMiddleware) // show error messages
 
