@@ -17,6 +17,7 @@
 - npm install concurrently --save-dev (rem to npm install in client when pulled)
 - npm install cors
 - npm install moment
+- npm install helmet xss-clean express-mongo-sanitize express-rate-limit
 
 # frontend setup (check readme in client)
 - npm install if pulled

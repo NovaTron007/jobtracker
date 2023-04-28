@@ -1,12 +1,24 @@
 import express from "express"
-const router = express.Router()
+
+// prepend routes
+const router = express.Router() 
+
+// rate limit on this routes
+import rateLimiter from "express-rate-limit" 
+const apiLimiter = rateLimiter ({
+    windowMs: 15 * 60 * 1000, // 15 mins
+    max: 10, // 10 requests max in 15 mins
+    message: "Too many requests from this IP address, please try again in 15 mins"
+})
+
+// controllers & middleware
 import { register, login, logout, updateUser, getCurrentUser } from "../controllers/authController.js" // load controllers for routes to call
 import authenticateUser from "../middleware/authMiddleware.js" // one default export no need braces
 import checkTestUser from "../middleware/checkTestUserMiddleware.js" // check if test user
 
 // prepended: /api/v1/auth
-router.route("/register").post(register)
-router.route("/login").post(login)
+router.route("/register").post(apiLimiter, register)
+router.route("/login").post(apiLimiter, login)
 router.route("/logout").get(logout)
 
 // prepended: /api/v1/jobs
