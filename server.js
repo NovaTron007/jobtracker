@@ -12,6 +12,15 @@ import connectDB from "./config/dbConnect.js" // connect to mongodb
 import helmet from "helmet"; // remove, set headers to comply w/web security stds i.e x-powered
 import xss from "xss-clean" // sanitize user input against xss
 import mongoSanitize from "express-mongo-sanitize" // prevent mongoDB operator injection
+// routes: import route files (calls controller)
+import authRouter from "./routes/authRoutes.js"
+import jobsRouter from "./routes/jobRoutes.js"
+// for deployment use nodejs 
+import path from "path"; // manage file paths. Different operating systems manage file and directory-related operations differently
+import { fileURLToPath } from "url" // encodes absolute paths cross platform 
+import { dirname } from "path" // returns a directory name
+
+
 
 
 
@@ -21,9 +30,11 @@ const app = express()
 // use dotenv (use path obj for specific folder)
 dotenv.config({path: "./config/config.env"}) // load .env before other files that use them
 
-// import route files (calls controller)
-import authRouter from "./routes/authRoutes.js"
-import jobsRouter from "./routes/jobRoutes.js"
+// get root path using dirname and encoded path using file fileURLtoPath 
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+// only when ready to deploy get root directory name
+app.use(express.static(path.resolve(__dirname, './client/build')));
 
 // Parse json data sent from body
 app.use(express.json())

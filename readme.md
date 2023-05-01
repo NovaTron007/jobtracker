@@ -27,5 +27,14 @@
 - /node_modules
 - /config/.env
 
-# build
-- In scripts "build-client": "cd client && npm run build"
+# build & install client scripts
+- In root package.json scripts "install-client": "cd client && npm install"
+- In root package.json scripts "build-client": "cd client && npm run build"
+# deployment
+- In client remove build and node_modules
+- In server remove node_modules, package-lock.json
+- In root package.json scripts add "setup-production":"npm run install-client && npm run build-client && npm install"
+
+# run last steps locally
+- npm run setup-production
+- node server

@@ -300,7 +300,7 @@ const AppProvider = ({children}) => {
         clearAlert()
     }
 
-    // set job to edit
+    // set job to edit, in reducer use id to find job to edit from state
     const setEditJob = (id) => {
         console.log("set editJob id: ", id)
         dispatch({
